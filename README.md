@@ -1,7 +1,6 @@
 # AI macOS Agent
 
-A comprehensive toolkit for running AI services locally on macOS in  a containerized environment,  
-combining the power of n8n workflow automation and Agent Zero AI assistants.
+A comprehensive toolkit for running AI services locally on macOS in  a containerized environment, combining the power of n8n workflow automation and Agent Zero AI assistants.
 
 ### Good artists copy, great artists steal.  
 Pablo Picasso
@@ -16,15 +15,11 @@ The following repositories inspired me to build my own local **AI macOS Agent** 
 
 ## About me
 
-Actually, I am definitely not someone, who's core competencies is coding.
+Actually, I am definitely not someone, who's core competence is coding.
 
-But I would like to have much more of these skills, be it in the zsh shell or be it with docker  
-compose, Ansible or whatever helps me to set up my own server or like now setting up different own  
-local AI services, starting with 'simple' Ollama installation + some LLMs in the background. 
+But I would like to have much more of these skills, be it in the zsh shell or be it with docker compose, Ansible or whatever helps me to set up my own server or like now setting up different own  local AI services, starting with 'simple' Ollama installation + some LLMs in the background. 
 
-But because these alone and their limitations by *knowledge cutoff* and not being able of research  
-the web or not being able to analyze and make use of my private or business files don't really satify  
-me and I was looking for possibilities to go beyond these limitations.
+But because these alone and their limitations by *knowledge cutoff* and not being able of research the web or not being able to analyze and make use of my private or business files don't really satify me I was looking for possibilities to go beyond these limitations.
 
 Work in progress ...
 
