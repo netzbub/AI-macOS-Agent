@@ -60,7 +60,7 @@ All services are accessible through a central Astroluma dashboard and secured wi
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/ai-macos-agent.git
+   git clone https://github.com/netzbub/ai-macos-agent.git
    cd ai-macos-agent
    ```
 
@@ -186,8 +186,8 @@ The integration code in this repository is licensed under the MIT License.
 ## Acknowledgments
 
 - [Original Local AI Starter Kit](https://github.com/n8n-io/self-hosted-ai-starter-kit) by the n8n team
-- [n8n Self-hosted AI Starter Kit 3](https://github.com/tuyenhm68/self-hosted-ai-starter-kit-3)
-- [Agent Zero](https://github.com/frdel/agent-zero)
+- [n8n Self-hosted AI Starter Kit 3](https://github.com/tuyenhm68/self-hosted-ai-starter-kit-3) by tuyenhm68
+- [Agent Zero](https://github.com/frdel/agent-zero) by Jan Tomášek and his contributors
 - [Astroluma](https://github.com/astroluma/astroluma)
 - [Traefik](https://traefik.io/)
 - [Ollama](https://ollama.ai/)
