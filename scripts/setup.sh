@@ -21,9 +21,9 @@ BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}====================================================${NC}"
-echo -e "${BLUE}      Self-Hosted > AI macOS Agent - Setup Script       ${NC}"
-echo -e "${BLUE}====================================================${NC}"
+echo -e "${BLUE}=========================================${NC}"
+echo -e "${BLUE}    AI macOS Agent - Setup Script    ${NC}"
+echo -e "${BLUE}=========================================${NC}"
 echo ""
 
 # Check prerequisites
@@ -206,4 +206,4 @@ echo ""
 echo -e "Please refer to the user guide for detailed instructions:"
 echo -e "${GREEN}$BASE_DIR/docs/user_guide.md${NC}"
 echo ""
-echo -e "Thank you for using the Self-Hosted AI Toolkit!"
+echo -e "Thank you for using the AI macOS Agent!"

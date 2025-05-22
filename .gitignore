@@ -23,3 +23,6 @@ logs/
 # Temporary files
 *.tmp
 .cache/
+
+# history files
+.history/

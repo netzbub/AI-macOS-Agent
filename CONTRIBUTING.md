@@ -1,6 +1,6 @@
-# Contributing to Self-Hosted AI Toolkit
+# Contributing to AI macOS Agent
 
-Thank you for considering contributing to the Self-Hosted AI Toolkit! This document provides guidelines and instructions for contributing to this project.
+Thank you for considering contributing to AI macOS Agent! This document provides guidelines and instructions for contributing to this project.
 
 ## Code of Conduct
 
@@ -42,8 +42,8 @@ We welcome suggestions for enhancements! Please create an issue with:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/self-hosted-ai-toolkit.git
-   cd self-hosted-ai-toolkit
+   git clone https://github.com/yourusername/ai-macos-agent.git
+   cd ai-macos-agent
    ```
 
 2. Copy the example environment file:
@@ -87,4 +87,4 @@ Before submitting a pull request, please test your changes:
 
 If you have any questions about contributing, please open an issue with your question.
 
-Thank you for contributing to the Self-Hosted AI Toolkit!
+Thank you for contributing to AI macOS Agent!

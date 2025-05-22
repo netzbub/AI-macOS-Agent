@@ -33,7 +33,7 @@ If there is something wrong with my use of your code or the licenses - please ge
 ## Overview
 
 This project integrates two powerful AI frameworks:
-- **Self-hosted AI Starter Kit 3**: Provides n8n workflow automation with 400+ integrations and AI components
+- **AI macOS Agent**: Provides n8n workflow automation with 400+ integrations and AI components
 - **Agent Zero**: Offers AI agents with terminal and web interfaces
 
 All services are accessible through a central Astroluma dashboard and secured with local SSL certificates.
@@ -60,8 +60,8 @@ All services are accessible through a central Astroluma dashboard and secured wi
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/self-hosted-ai-toolkit.git
-   cd self-hosted-ai-toolkit
+   git clone https://github.com/yourusername/ai-macos-agent.git
+   cd ai-macos-agent
    ```
 
 2. Copy the example environment file and edit it:
