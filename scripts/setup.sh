@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script to set up the Self-Hosted AI Toolkit
+# Script to set up the AI macOS Agent
 # This script orchestrates the entire setup process
 
 # Load environment variables

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script to validate all services in the Self-Hosted AI Toolkit
+# Script to validate all services in the AI macOS Agent
 # This script checks if all services are running correctly
 
 # Load environment variables

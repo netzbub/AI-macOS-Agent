@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-05-21
 
 ### Added
-- Initial release of Self-Hosted AI Toolkit
+- Initial release of AI macOS Agent
 - Integration of n8n workflow automation with 400+ nodes
 - Integration of Agent Zero AI assistant
 - Astroluma dashboard for central service management
