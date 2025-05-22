@@ -185,6 +185,7 @@ The integration code in this repository is licensed under the MIT License.
 
 ## Acknowledgments
 
+- [Original Local AI Starter Kit](https://github.com/n8n-io/self-hosted-ai-starter-kit) by the n8n team
 - [n8n Self-hosted AI Starter Kit 3](https://github.com/tuyenhm68/self-hosted-ai-starter-kit-3)
 - [Agent Zero](https://github.com/frdel/agent-zero)
 - [Astroluma](https://github.com/astroluma/astroluma)
