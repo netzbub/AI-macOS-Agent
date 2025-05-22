@@ -1,6 +1,32 @@
-# Self-Hosted AI Toolkit
+# AI macOS Agent
 
-A comprehensive toolkit for running AI services locally on macOS, combining the power of n8n workflow automation and Agent Zero AI assistants.
+A comprehensive toolkit for running AI services locally on macOS in  a containerized environment,  
+combining the power of n8n workflow automation and Agent Zero AI assistants.
+
+### Good artists copy, great artists steal.  
+Pablo Picasso
+
+#### Important Links
+
+The following repositories inspired me to build my own local **AI macOS Agent** - up to now a first sketch on the wall and will have to be improved over time.
+
+- [Original Local AI Starter Kit](https://github.com/n8n-io/self-hosted-ai-starter-kit) by the n8n team
+- [Original self-hosted-ai-starter-kit-3](https://github.com/tuyenhm68/self-hosted-ai-starter-kit-3) by tuyenhm68
+- [Original agent-zero](https://github.com/frdel/agent-zero) by Jan Tomášek and his contributors
+
+## About me
+
+Actually, I am definitely not someone, who's core competencies is coding.
+
+But I would like to have much more of these skills, be it in the zsh shell or be it with docker  
+compose, Ansible or whatever helps me to set up my own server or like now setting up different own  
+local AI services, starting with 'simple' Ollama installation + some LLMs in the background. 
+
+But because these alone and their limitations by *knowledge cutoff* and not being able of research  
+the web or not being able to analyze and make use of my private or business files don't really satify  
+me and I was looking for possibilities to go beyond these limitations.
+
+Work in progress ...
 
 ## Overview
 
