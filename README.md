@@ -7,7 +7,7 @@ Pablo Picasso
 
 #### Important Links
 
-The following repositories inspired me to build my own local **AI macOS Agent** - up to now a first sketch on the wall and will have to be improved over time.
+The following repositories inspired me to build my own local **AI macOS Agent** - up to now a first sketch on the wall and it will have to be improved over time.
 
 - [Original Local AI Starter Kit](https://github.com/n8n-io/self-hosted-ai-starter-kit) by the n8n team
 - [Original self-hosted-ai-starter-kit-3](https://github.com/tuyenhm68/self-hosted-ai-starter-kit-3) by tuyenhm68
@@ -15,13 +15,20 @@ The following repositories inspired me to build my own local **AI macOS Agent** 
 
 ## About me
 
-Actually, I am definitely not someone, who's core competence is coding.
+I am definitely not someone, who's core competence is coding.
 
-But I would like to have much more of these skills, be it in the zsh shell or be it with docker compose, Ansible or whatever helps me to set up my own server or like now setting up different own  local AI services, starting with 'simple' Ollama installation + some LLMs in the background. 
+But I would like to have much more of these skills, be it in the zsh shell or be it with docker compose, Ansible or whatever helps me to set up my own server or like now setting up different local AI services, starting with 'simple' Ollama installation + some LLMs in the background. 
 
-But because these alone and their limitations by *knowledge cutoff* and not being able of research the web or not being able to analyze and make use of my private or business files don't really satify me I was looking for possibilities to go beyond these limitations.
+But because of the limitations of these local LLMs by their *knowledge cutoff* and not being able of having researches on the web nor being able to analyze and make use of my private or business files, I was looking for possibilities to get beyond these limitations.
 
-Work in progress ...
+The installation scripts and docker-compose files are based on the before mentioned and linked projects and then in close cooperation created with awesome help of
+
+- [manus.im](https://manus.im)
+
+I am deeply thankful to the creators and contributors of the above mentioned repositories and as well to the creators of manus.im.
+
+If there is something wrong with my use of your code or the licenses - please get in contact with me and let me know.
+
 
 ## Overview
 
