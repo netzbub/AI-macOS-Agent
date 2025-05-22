@@ -1,0 +1,25 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Certificates
+*.pem
+*.key
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Data directories
+data/
+shared/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+.cache/

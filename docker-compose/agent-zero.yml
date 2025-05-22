@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  agent-zero:
+    image: frdel/agent-zero-run:latest
+    container_name: agent-zero
+    restart: unless-stopped
+    volumes:
+      - ../data/agent-zero:/a0
+      - ../shared:/a0/shared
+    networks:
+      - traefik_network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - OLLAMA_HOST=${OLLAMA_HOST}
+      - OLLAMA_PORT=${OLLAMA_PORT}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.agent-zero.rule=Host(`agent.${DOMAIN}`)"
+      - "traefik.http.routers.agent-zero.entrypoints=websecure"
+      - "traefik.http.routers.agent-zero.tls=true"
+      - "traefik.http.services.agent-zero.loadbalancer.server.port=${AGENT_ZERO_PORT}"
+
+networks:
+  traefik_network:
+    external: true

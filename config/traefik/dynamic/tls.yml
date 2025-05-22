@@ -1,0 +1,9 @@
+tls:
+  certificates:
+    - certFile: "/certs/${DOMAIN}+1.pem"
+      keyFile: "/certs/${DOMAIN}+1-key.pem"
+  stores:
+    default:
+      defaultCertificate:
+        certFile: "/certs/${DOMAIN}+1.pem"
+        keyFile: "/certs/${DOMAIN}+1-key.pem"
