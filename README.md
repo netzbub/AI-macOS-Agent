@@ -5,7 +5,7 @@ A comprehensive toolkit for running AI services locally on macOS in a containeri
 ### "Good artists copy, great artists steal."  
 (PabloPicasso)  
 
-![Feininger](https://github.com/[netzbub]/[AI-macOS-Agent]/blob/[main]/Feininger.jpg?raw=true)
+![Feininger](https://github.com/netzbub/AI-macOS-Agent/blob/main/docs/images/feininger.jpg)
 Lyonel Feininger
 
 ### Table of Contents
