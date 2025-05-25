@@ -9,7 +9,11 @@ A comprehensive toolkit for running AI services locally on macOS in a containeri
   <span style="font-size: 0.8em; font-weight: normal; margin-left: 10px;">Pablo Picasso</span>
 </div>  
 
+<<<<<<< HEAD
 ![Feininger](/docs/images/Feininger.jpg) 
+=======
+![Feininger](./docs/images/Feininger.jpg) 
+>>>>>>> 03ac919cdefcd78b0c22503ec875a71e1c4c3fbf
 
 <div style="text-align: right; margin: 0px 0;">
   <span style="font-size: 0.8em; font-weight: normal; margin-left: 0px;">Lyonel Feininger</span>
