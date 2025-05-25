@@ -1,11 +1,42 @@
 # AI macOS Agent
 
-A comprehensive toolkit for running AI services locally on macOS in  a containerized environment, combining the power of n8n workflow automation and Agent Zero AI assistants.
+A comprehensive toolkit for running AI services locally on macOS in a containerized environment, combining the power of n8n workflow automation and Agent Zero AI assistants.
 
-### Good artists copy, great artists steal.  
-Pablo Picasso
+<div style="text-align: left; margin: 20px 0;">
+  <blockquote style="font-style: italic; font-weight: bold; font-size: 1.2em; margin: 0; display: inline;">
+    "Good artists copy, great artists steal."
+  </blockquote>
+  <span style="font-size: 0.8em; font-weight: normal; margin-left: 10px;">Pablo Picasso</span>
+</div>  
 
-#### Important Links
+![Feininger](/docs/images/Feininger.jpg) 
+
+<div style="text-align: right; margin: 0px 0;">
+  <span style="font-size: 0.8em; font-weight: normal; margin-left: 0px;">Lyonel Feininger</span>
+</div>
+
+### Table of Contents
+- [AI macOS Agent](#ai-macos-agent)
+    - [Table of Contents](#table-of-contents)
+    - [Inspiration](#inspiration)
+    - [Overview](#overview)
+    - [Features](#features)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+    - [Configuration](#configuration)
+    - [Directory Structure](#directory-structure)
+    - [Usage](#usage)
+    - [Accessing Services](#accessing-services)
+    - [Working with Local Files](#working-with-local-files)
+    - [Backup to Synology NAS](#backup-to-synology-nas)
+    - [Maintenance](#maintenance)
+    - [Updating Services](#updating-services)
+    - [Checking Logs](#checking-logs)
+    - [License](#license)
+    - [Acknowledgments](#acknowledgments)
+
+
+### Inspiration
 
 The following repositories inspired me to build my own local **AI macOS Agent** - up to now a first sketch on the wall and it will have to be improved over time.
 
@@ -13,24 +44,7 @@ The following repositories inspired me to build my own local **AI macOS Agent** 
 - [Original self-hosted-ai-starter-kit-3](https://github.com/tuyenhm68/self-hosted-ai-starter-kit-3) by tuyenhm68
 - [Original agent-zero](https://github.com/frdel/agent-zero) by Jan Tomášek and his contributors
 
-## About me
-
-I am definitely not someone, who's core competence is coding.
-
-But I would like to have much more of these skills, be it in the zsh shell or be it with docker compose, Ansible or whatever helps me to set up my own server or like now setting up different local AI services, starting with 'simple' Ollama installation + some LLMs in the background. 
-
-But because of the limitations of these local LLMs by their *knowledge cutoff* and not being able of having researches on the web nor being able to analyze and make use of my private or business files, I was looking for possibilities to get beyond these limitations.
-
-The installation scripts and docker-compose files are based on the before mentioned and linked projects and then in close cooperation created with awesome help of
-
-- [manus.im](https://manus.im)
-
-I am deeply thankful to the creators and contributors of the above mentioned repositories and as well to the creators of manus.im.
-
-If there is something wrong with my use of your code or the licenses - please get in contact with me and let me know.
-
-
-## Overview
+### Overview
 
 This project integrates two powerful AI frameworks:
 - **AI macOS Agent**: Provides n8n workflow automation with 400+ integrations and AI components
@@ -38,29 +52,40 @@ This project integrates two powerful AI frameworks:
 
 All services are accessible through a central Astroluma dashboard and secured with local SSL certificates.
 
-## Features
+### Features
 
 - **Central Dashboard**: Astroluma for managing all services
 - **Workflow Automation**: n8n with 400+ integrations and AI components
 - **AI Agents**: Agent Zero for terminal and web-based AI assistance
-- **Local LLM Integration**: Direct connection to locally installed Ollama
+- **Local LLM Integration**: Direct connection to locally installed Ollama via host.docker.internal bridge, allowing containers to access Ollama running on the host system
 - **SSL Security**: Local domains secured with mkcert certificates
 - **Reverse Proxy**: Traefik for routing and SSL termination
-- **Backup Solution**: Optimized for Synology NAS with limited resources
+- **Backup Solution**: Optimized for Synology NAS
 
-## Prerequisites
+### Prerequisites
 
 - macOS (tested on macOS 15.5)
 - [Homebrew](https://brew.sh/)
 - [Docker/Orbstack](https://orbstack.dev/)
-- [Ollama](https://ollama.ai/) (installed locally, not in container)
-- [mkcert](https://github.com/FiloSottile/mkcert) (`brew install mkcert`)
+- [Ollama](https://ollama.ai/) - installed locally, not locally in a container
+- [mkcert](https://github.com/FiloSottile/mkcert) - follow the instructions in the mkcert repository
 
-## Installation
+**Be very (!) careful** with choosing a TLD for your local network. The most recommended two ways, that will not conflict with existing domains or with public DNS, are either to use [.home.arpa](https://home.arpa) and set up you own local root certificate for example with [mkcert](https://github.com/FiloSottile/mkcert). The second recommended way is to use a subdomain of a domain, that you 'own' like [sub.mydomain.com](https://sub.mydomain.com).
+
+Add to /etc/hosts:
+```
+127.0.0.1   mac.home.arpa
+127.0.0.1   luma.home.arpa
+127.0.0.1   n8n.home.arpa
+127.0.0.1   agent.home.arpa
+127.0.0.1   traefik.home.arpa
+```
+
+### Installation
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/ai-macos-agent.git
+   git clone https://github.com/netzbub/ai-macos-agent.git
    cd ai-macos-agent
    ```
 
@@ -77,18 +102,24 @@ All services are accessible through a central Astroluma dashboard and secured wi
    ```
 
 4. Access the services:
-   - Dashboard: https://dashboard.mac.local
-   - n8n: https://n8n.mac.local
-   - Agent Zero: https://agent.mac.local
-   - Traefik: https://traefik.mac.local
+   - Dashboard: https://luma.home.arpa
+   - n8n: https://n8n.home.arpa
+   - Agent Zero: https://agent.home.arpa
+   - Traefik: https://traefik.home.arpa
 
-## Configuration
+### Configuration
 
 The central `.env` file contains all configuration options:
 
 ```
 # General Settings
-DOMAIN=mac.local
+DOMAIN=home.arpa
+
+# Port Settings
+N8N_PORT=5678
+ASTROLUMA_PORT=8000
+AGENT_ZERO_PORT=80
+TRAEFIK_DASHBOARD_PORT=8080
 
 # n8n Settings
 N8N_ENCRYPTION_KEY=your-encryption-key
@@ -99,38 +130,55 @@ OLLAMA_HOST=host.docker.internal
 OLLAMA_PORT=11434
 ```
 
-## Directory Structure
+### Directory Structure
 
 ```
-├── config/
-│   ├── traefik/
-│   │   ├── traefik.yml
-│   │   └── dynamic/
-│   │       └── tls.yml
-├── docker-compose/
-│   ├── traefik.yml
-│   ├── astroluma.yml
-│   ├── n8n.yml
-│   └── agent-zero.yml
-├── docs/
-│   └── user_guide.md
-└── scripts/
-    ├── setup.sh
-    ├── generate-certs.sh
-    ├── setup-volumes.sh
-    ├── validate-services.sh
-    └── backup-synology.sh
+.
+├── .env.example
+├── .git
+├── .gitignore
+├── .history
+├── config
+│   └── traefik
+│       ├── dynamic
+│       │   └── tls.yml
+│       └── traefik.yml
+│       └── certs/
+├── data/
+│   ├── agent-zero/
+│   ├── astroluma/
+│   ├── n8n/
+│   └── postgres/
+├── docker-compose
+│   ├── agent-zero.yml
+│   ├── astroluma.yml
+│   ├── n8n.yml
+│   └── traefik.yml
+├── docs
+│   ├── CODE_OF_CONDUCT.md
+│   ├── CONTRIBUTING.md
+│   └── images
+│       └── feininger.jpg
+├── README.md
+├── scripts
+│   ├── backup-synology.sh
+│   ├── generate-certs.sh
+│   ├── setup-n8n.sh
+│   ├── setup-volumes.sh
+│   ├── setup.sh
+│   └── validate-services.sh
+└── shared
 ```
 
-## Usage
+### Usage
 
 ### Accessing Services
 
 All services are accessible through your browser using the following URLs:
-- **Astroluma Dashboard**: https://dashboard.mac.local
-- **n8n Workflow Automation**: https://n8n.mac.local
-- **Agent Zero**: https://agent.mac.local
-- **Traefik Dashboard**: https://traefik.mac.local
+- **Astroluma Dashboard**: https://luma.home.arpa
+- **n8n Workflow Automation**: https://n8n.home.arpa
+- **Agent Zero**: https://agent.home.arpa
+- **Traefik Dashboard**: https://traefik.home.arpa
 
 ### Working with Local Files
 
@@ -152,7 +200,7 @@ chmod +x scripts/backup-synology.sh
 ./scripts/backup-synology.sh
 ```
 
-## Maintenance
+### Maintenance
 
 ### Updating Services
 
@@ -171,11 +219,7 @@ docker logs n8n
 docker logs agent-zero
 ```
 
-## Troubleshooting
-
-See the [User Guide](docs/user_guide.md) for detailed troubleshooting steps.
-
-## License
+### License
 
 This project combines components with different licenses:
 - n8n starter kit: [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
@@ -183,9 +227,8 @@ This project combines components with different licenses:
 
 The integration code in this repository is licensed under the MIT License.
 
-## Acknowledgments
+### Acknowledgments
 
-- [Original Local AI Starter Kit](https://github.com/n8n-io/self-hosted-ai-starter-kit) by the n8n team
 - [n8n Self-hosted AI Starter Kit 3](https://github.com/tuyenhm68/self-hosted-ai-starter-kit-3)
 - [Agent Zero](https://github.com/frdel/agent-zero)
 - [Astroluma](https://github.com/astroluma/astroluma)
