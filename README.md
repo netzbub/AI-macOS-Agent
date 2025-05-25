@@ -5,7 +5,7 @@ A comprehensive toolkit for running AI services locally on macOS in a containeri
 ### "Good artists copy, great artists steal."  
 (PabloPicasso)  
 
-[[./docs/images/Feininger.jpg]]
+[[/docs/images/Feininger.jpg]]
 Lyonel Feininger
 
 ### Table of Contents
