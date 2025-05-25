@@ -5,11 +5,8 @@ A comprehensive toolkit for running AI services locally on macOS in a containeri
 ### "Good artists copy, great artists steal."  
 (PabloPicasso)  
 
-![Feininger](/docs/images/Feininger.jpg) 
-
-<div style="text-align: right; margin: 0px 0;">
-  <span style="font-size: 0.8em; font-weight: normal; margin-left: 0px;">Lyonel Feininger</span>
-</div>
+[[./docs/images/Feininger.jpg]]
+Lyonel Feininger
 
 ### Table of Contents
 - [AI macOS Agent](#ai-macos-agent)
