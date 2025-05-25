@@ -76,7 +76,7 @@ done
 
 # Check URLs
 urls=(
-    "https://dashboard.${DOMAIN}|Astroluma Dashboard"
+    "https://luma.${DOMAIN}|Astroluma Dashboard"
     "https://n8n.${DOMAIN}|n8n Workflow Automation"
     "https://agent.${DOMAIN}|Agent Zero"
     "https://traefik.${DOMAIN}|Traefik Dashboard"
@@ -119,7 +119,7 @@ if [ $failed_containers -eq 0 ] && [ $failed_urls -eq 0 ]; then
     echo -e "${GREEN}All services are running correctly!${NC}"
     echo ""
     echo "You can access the services at:"
-    echo "- Astroluma Dashboard: https://dashboard.${DOMAIN}"
+    echo "- Astroluma Dashboard: https://luma.${DOMAIN}"
     echo "- n8n Workflow Automation: https://n8n.${DOMAIN}"
     echo "- Agent Zero: https://agent.${DOMAIN}"
     echo "- Traefik Dashboard: https://traefik.${DOMAIN}"

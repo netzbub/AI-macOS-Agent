@@ -1,8 +1,8 @@
 version: '3'
 
 services:
-  astroluma:
-    image: ghcr.io/astroluma/astroluma:latest
+  app:
+    image: sanjeet990/astroluma:latest
     container_name: astroluma
     restart: unless-stopped
     volumes:
@@ -11,7 +11,7 @@ services:
       - traefik_network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.astroluma.rule=Host(`dashboard.${DOMAIN}`)"
+      - "traefik.http.routers.astroluma.rule=Host(`luma.${DOMAIN}`)"
       - "traefik.http.routers.astroluma.entrypoints=websecure"
       - "traefik.http.routers.astroluma.tls=true"
       - "traefik.http.services.astroluma.loadbalancer.server.port=${ASTROLUMA_PORT}"

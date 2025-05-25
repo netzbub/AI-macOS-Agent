@@ -19,6 +19,7 @@ BASE_DIR="$(pwd)"
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
+RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 echo -e "${BLUE}=========================================${NC}"
@@ -52,6 +53,19 @@ fi
 
 echo -e "${GREEN}All prerequisites are met!${NC}"
 echo ""
+
+# Display /etc/hosts requirement
+echo -e "${YELLOW}Important: Please add these lines to your /etc/hosts file:${NC}"
+echo -e "${BLUE}127.0.0.1   home.arpa${NC}"
+echo -e "${BLUE}127.0.0.1   luma.home.arpa${NC}"
+echo -e "${BLUE}127.0.0.1   n8n.home.arpa${NC}"
+echo -e "${BLUE}127.0.0.1   agent.home.arpa${NC}"
+echo -e "${BLUE}127.0.0.1   traefik.home.arpa${NC}"
+echo ""
+echo -e "You can do this by running:"
+echo -e "${GREEN}sudo nano /etc/hosts${NC}"
+echo ""
+read -p "Press Enter to continue after updating /etc/hosts..."
 
 # Create directory structure
 echo -e "${YELLOW}Creating directory structure...${NC}"
@@ -140,10 +154,10 @@ echo -e "${YELLOW}Starting services...${NC}"
 echo "This may take a few minutes..."
 
 cd "$BASE_DIR"
-docker-compose -f docker-compose/traefik.yml up -d
-docker-compose -f docker-compose/astroluma.yml up -d
-docker-compose -f docker-compose/n8n.yml up -d
-docker-compose -f docker-compose/agent-zero.yml up -d
+docker-compose -f docker-compose/traefik.yml --env-file .env up -d
+docker-compose -f docker-compose/astroluma.yml --env-file .env up -d
+docker-compose -f docker-compose/n8n.yml --env-file .env up -d
+docker-compose -f docker-compose/agent-zero.yml --env-file .env up -d
 
 echo -e "${GREEN}All services started!${NC}"
 echo ""
@@ -151,7 +165,7 @@ echo ""
 # Validate services
 echo -e "${YELLOW}Validating services...${NC}"
 echo "Please wait a moment for all services to initialize..."
-sleep 10
+sleep 15
 
 # Check if containers are running
 containers=("traefik" "astroluma" "n8n" "postgres" "agent-zero")
@@ -164,13 +178,14 @@ for container in "${containers[@]}"; do
         echo -e "${GREEN}✓ Container $container is running${NC}"
     else
         echo -e "${RED}✗ Container $container is not running${NC}"
+        docker logs $container --tail 10
         failed_containers=$((failed_containers+1))
     fi
 done
 
 # Check URLs
 urls=(
-    "https://dashboard.${DOMAIN}|Astroluma Dashboard"
+    "https://luma.${DOMAIN}|Astroluma Dashboard"
     "https://n8n.${DOMAIN}|n8n Workflow Automation"
     "https://agent.${DOMAIN}|Agent Zero"
     "https://traefik.${DOMAIN}|Traefik Dashboard"
@@ -198,7 +213,7 @@ echo -e "${BLUE}      Installation Complete!                       ${NC}"
 echo -e "${BLUE}==================================================${NC}"
 echo ""
 echo -e "You can access the services at:"
-echo -e "- Astroluma Dashboard: ${GREEN}https://dashboard.${DOMAIN}${NC}"
+echo -e "- Astroluma Dashboard: ${GREEN}https://luma.${DOMAIN}${NC}"
 echo -e "- n8n Workflow Automation: ${GREEN}https://n8n.${DOMAIN}${NC}"
 echo -e "- Agent Zero: ${GREEN}https://agent.${DOMAIN}${NC}"
 echo -e "- Traefik Dashboard: ${GREEN}https://traefik.${DOMAIN}${NC}"
