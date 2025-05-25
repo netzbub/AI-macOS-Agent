@@ -2,18 +2,10 @@
 
 A comprehensive toolkit for running AI services locally on macOS in a containerized environment, combining the power of n8n workflow automation and Agent Zero AI assistants.
 
-<div style="text-align: left; margin: 20px 0;">
-  <blockquote style="font-style: italic; font-weight: bold; font-size: 1.2em; margin: 0; display: inline;">
-    "Good artists copy, great artists steal."
-  </blockquote>
-  <span style="font-size: 0.8em; font-weight: normal; margin-left: 10px;">Pablo Picasso</span>
-</div>  
+### "Good artists copy, great artists steal."  
+(PabloPicasso)  
 
-<<<<<<< HEAD
 ![Feininger](/docs/images/Feininger.jpg) 
-=======
-![Feininger](./docs/images/Feininger.jpg) 
->>>>>>> 03ac919cdefcd78b0c22503ec875a71e1c4c3fbf
 
 <div style="text-align: right; margin: 0px 0;">
   <span style="font-size: 0.8em; font-weight: normal; margin-left: 0px;">Lyonel Feininger</span>
@@ -21,6 +13,7 @@ A comprehensive toolkit for running AI services locally on macOS in a containeri
 
 ### Table of Contents
 - [AI macOS Agent](#ai-macos-agent)
+    - ["Good artists copy, great artists steal."](#good-artists-copy-great-artists-steal)
     - [Table of Contents](#table-of-contents)
     - [Inspiration](#inspiration)
     - [Overview](#overview)
