@@ -2,15 +2,15 @@
 
 A comprehensive toolkit for running AI services locally on macOS in a containerized environment, combining the power of n8n workflow automation and Agent Zero AI assistants.
 
-### "Good artists copy, great artists steal."  
+## *"Good artists copy, great artists steal."*  
 (PabloPicasso)  
 
-![Feininger](https://github.com/netzbub/AI-macOS-Agent/blob/main/docs/images/feininger.jpg)
+![Feininger](https://github.com/netzbub/AI-macOS-Agent/blob/main/docs/images/feininger.jpg)  
 Lyonel Feininger
 
 ### Table of Contents
 - [AI macOS Agent](#ai-macos-agent)
-    - ["Good artists copy, great artists steal."](#good-artists-copy-great-artists-steal)
+  - [*"Good artists copy, great artists steal."*](#good-artists-copy-great-artists-steal)
     - [Table of Contents](#table-of-contents)
     - [Inspiration](#inspiration)
     - [Overview](#overview)
