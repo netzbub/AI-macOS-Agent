@@ -45,3 +45,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Edited .env.example
 - Edited astroluma.yml
 - Edited n8n.yml
+
+## [1.0.3] - 2025-05-27
+
+### Changed
+- Edited .env.example - port conflicts
+- Edited agent-zero.yml - port conflicts

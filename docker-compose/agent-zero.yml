@@ -1,10 +1,11 @@
 version: '3'
-
 services:
   agent-zero:
     image: frdel/agent-zero-run:latest
     container_name: agent-zero
     restart: unless-stopped
+    ports:
+      - "8080:80"
     volumes:
       - ../data/agent-zero:/a0
       - ../shared:/a0/shared
@@ -20,8 +21,7 @@ services:
       - "traefik.http.routers.agent-zero.rule=Host(`agent.${DOMAIN}`)"
       - "traefik.http.routers.agent-zero.entrypoints=websecure"
       - "traefik.http.routers.agent-zero.tls=true"
-      - "traefik.http.services.agent-zero.loadbalancer.server.port=${AGENT_ZERO_PORT}"
-
+      - "traefik.http.services.agent-zero.loadbalancer.server.port=80"
 networks:
   traefik_network:
     external: true
