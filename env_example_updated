@@ -1,6 +1,4 @@
 # Domain Configuration
-# Be aware, that mkcert only supports sub.mydomain.com 
-# but will not work with next.sub.mydomain.com.
 DOMAIN=home.arpa
 
 # PostgreSQL Configuration

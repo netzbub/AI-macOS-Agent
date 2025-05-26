@@ -8,7 +8,7 @@ services:
     environment:
       - N8N_HOST=n8n.${DOMAIN}
       - N8N_PROTOCOL=https
-      - N8N_PORT=443
+      - N8N_PORT=5678
       - N8N_EDITOR_BASE_URL=https://n8n.${DOMAIN}
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=postgres
@@ -17,11 +17,11 @@ services:
       - DB_POSTGRESDB_USER=postgres
       - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
       - WEBHOOK_URL=https://n8n.${DOMAIN}/
-      - EXECUTIONS_PROCESS=main
       - GENERIC_TIMEZONE=Europe/Berlin
       - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
       - N8N_DIAGNOSTICS_ENABLED=false
       - N8N_VERSION_NOTIFICATIONS_ENABLED=false
+      - N8N_RUNNERS_ENABLED=true
       # Ollama integration
       - OLLAMA_HOST=${OLLAMA_HOST}
       - OLLAMA_PORT=${OLLAMA_PORT}
@@ -38,7 +38,7 @@ services:
       - "traefik.http.routers.n8n.rule=Host(`n8n.${DOMAIN}`)"
       - "traefik.http.routers.n8n.entrypoints=websecure"
       - "traefik.http.routers.n8n.tls=true"
-      - "traefik.http.services.n8n.loadbalancer.server.port=${N8N_PORT}"
+      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
     depends_on:
       - postgres
 

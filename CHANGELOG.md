@@ -38,3 +38,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optimized astroluma.yml
 - Shortened Code of Conduct
 - Revised setup.sh, validate-services.sh and Readme.md
+
+## [1.0.2] - 2025-05-26
+
+### Changed
+- Edited .env.example
+- Edited astroluma.yml
+- Edited n8n.yml

@@ -62,9 +62,9 @@ All services are accessible through a central Astroluma dashboard and secured wi
 - [Homebrew](https://brew.sh/)
 - [Docker/Orbstack](https://orbstack.dev/)
 - [Ollama](https://ollama.ai/) - installed locally, not locally in a container
-- [mkcert](https://github.com/FiloSottile/mkcert) - follow the instructions in the mkcert repository
+- [mkcert](https://github.com/FiloSottile/mkcert) - it has to be installed on your machine before running the installer, the bash-script will setup the SSL Certificates for the local domain and subdomain which you setup in the .env file.
 
-**Be very (!) careful** with choosing a TLD for your local network. The most recommended two ways, that will not conflict with existing domains or with public DNS, are either to use [.home.arpa](https://home.arpa) and set up you own local root certificate for example with [mkcert](https://github.com/FiloSottile/mkcert). The second recommended way is to use a subdomain of a domain, that you 'own' like [sub.mydomain.com](https://sub.mydomain.com).
+**Be very (!) careful** with choosing a TLD for your local network. The most recommended two ways, that will not conflict with existing local or public domains and with public DNS, are either to use [.home.arpa](https://home.arpa). The second recommended way is to use a subdomain of a domain, that you 'own' like [sub.mydomain.com](https://sub.mydomain.com). Be aware, that mkcert only supports sub.mydomain.com but will not work with next.sub.mydomain.com.
 
 Add to /etc/hosts:
 ```

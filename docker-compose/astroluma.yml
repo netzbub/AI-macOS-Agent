@@ -1,21 +1,44 @@
 version: '3'
 
 services:
+  mongodb:
+    image: mongo:latest
+    container_name: astroluma_mongodb
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD:-admin123}
+      - MONGO_INITDB_DATABASE=astroluma
+    volumes:
+      - ../data/mongodb:/data/db
+    networks:
+      - astroluma_network
+    ports:
+      - "127.0.0.1:27017:27017"
+
   app:
     image: sanjeet990/astroluma:latest
     container_name: astroluma
     restart: unless-stopped
+    environment:
+      - MONGODB_URI=mongodb://admin:${MONGODB_PASSWORD:-admin123}@mongodb:27017/astroluma?authSource=admin
+      - NODE_ENV=production
     volumes:
       - ../data/astroluma:/app/data
     networks:
       - traefik_network
+      - astroluma_network
+    depends_on:
+      - mongodb
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.astroluma.rule=Host(`luma.${DOMAIN}`)"
       - "traefik.http.routers.astroluma.entrypoints=websecure"
       - "traefik.http.routers.astroluma.tls=true"
-      - "traefik.http.services.astroluma.loadbalancer.server.port=${ASTROLUMA_PORT}"
+      - "traefik.http.services.astroluma.loadbalancer.server.port=8000"
 
 networks:
   traefik_network:
     external: true
+  astroluma_network:
+    driver: bridge
