@@ -40,7 +40,7 @@ The following repositories inspired me to build my own local **AI macOS Agent** 
 
 ### Overview
 
-This project integrates two powerful AI frameworks:
+This project integrates three powerful AI frameworks:
 - **AI macOS Agent**: Provides n8n workflow automation with 400+ integrations and AI components
 - **Agent Zero**: Offers AI agents with terminal and web interfaces
 - **Open WebUI**: Frontend for Ollama and several locally hosted LLMs
