@@ -1,6 +1,6 @@
 # AI macOS Agent
 
-A comprehensive toolkit for running AI services locally on macOS in a containerized environment, combining the power of n8n workflow automation and Agent Zero AI assistants.
+A comprehensive toolkit for running AI services locally on macOS in a containerized environment, combining the power of n8n workflow automation, Agent Zero AI assitant and Ollama running different LLMs inside Open WebUI.
 
 ## *"Good artists copy, great artists steal."*  
 (PabloPicasso)  
@@ -43,6 +43,7 @@ The following repositories inspired me to build my own local **AI macOS Agent** 
 This project integrates two powerful AI frameworks:
 - **AI macOS Agent**: Provides n8n workflow automation with 400+ integrations and AI components
 - **Agent Zero**: Offers AI agents with terminal and web interfaces
+- **Open WebUI**: Frontend for Ollama and several locally hosted LLMs
 
 All services are accessible through a central Astroluma dashboard and secured with local SSL certificates.
 
@@ -52,6 +53,7 @@ All services are accessible through a central Astroluma dashboard and secured wi
 - **Workflow Automation**: n8n with 400+ integrations and AI components
 - **AI Agents**: Agent Zero for terminal and web-based AI assistance
 - **Local LLM Integration**: Direct connection to locally installed Ollama via host.docker.internal bridge, allowing containers to access Ollama running on the host system
+- **Open WebUI** use different free LLMs in your favourite browser free and privacy focused
 - **SSL Security**: Local domains secured with mkcert certificates
 - **Reverse Proxy**: Traefik for routing and SSL termination
 - **Backup Solution**: Optimized for Synology NAS
@@ -73,6 +75,8 @@ Add to /etc/hosts:
 127.0.0.1   n8n.home.arpa
 127.0.0.1   agent.home.arpa
 127.0.0.1   traefik.home.arpa
+127.0.0.1   chat.home.arpa
+127.0.0.1   portainer.home.arpa  
 ```
 
 ### Installation
@@ -98,7 +102,9 @@ Add to /etc/hosts:
 4. Access the services:
    - Dashboard: https://luma.home.arpa
    - n8n: https://n8n.home.arpa
+   - Ollama: https://chats.home.arpa
    - Agent Zero: https://agent.home.arpa
+   - Portainer: https://portainer.home.arpa
    - Traefik: https://traefik.home.arpa
 
 ### Configuration
@@ -200,17 +206,19 @@ chmod +x scripts/backup-synology.sh
 
 ```bash
 cd docker-compose
-docker-compose -f traefik.yml -f astroluma.yml -f n8n.yml -f agent-zero.yml pull
-docker-compose -f traefik.yml -f astroluma.yml -f n8n.yml -f agent-zero.yml up -d
+docker-compose -f agent-zero.yml -f astroluma.yml -f n8n.yml -f open.webui -f portainer -f traefik.yml pull
+docker-compose -f agent-zero.yml -f astroluma.yml -f n8n.yml -f open.webui -f portainer -f traefik.yml up -d
 ```
 
 ### Checking Logs
 
 ```bash
-docker logs traefik
+docker logs agent-zero
 docker logs astroluma
 docker logs n8n
-docker logs agent-zero
+docker logs open-webui
+docker logs portainer
+docker logs traefik
 ```
 
 ### License
@@ -218,13 +226,15 @@ docker logs agent-zero
 This project combines components with different licenses:
 - n8n starter kit: [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 - Agent Zero: [MIT License](https://opensource.org/licenses/MIT)
+- Open WebUI: [Open WebUI License](https://github.com/open-webui/open-webui/blob/main/LICENSE)
 
 The integration code in this repository is licensed under the MIT License.
 
 ### Acknowledgments
 
-- [n8n Self-hosted AI Starter Kit 3](https://github.com/tuyenhm68/self-hosted-ai-starter-kit-3)
 - [Agent Zero](https://github.com/frdel/agent-zero)
 - [Astroluma](https://github.com/astroluma/astroluma)
-- [Traefik](https://traefik.io/)
+- [n8n Self-hosted AI Starter Kit 3](https://github.com/tuyenhm68/self-hosted-ai-starter-kit-3)
 - [Ollama](https://ollama.ai/)
+- [Portainer](https://www.portainer.io)
+- [Traefik](https://traefik.io/)
