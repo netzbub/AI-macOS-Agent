@@ -1,22 +1,26 @@
-version: '3'
-
 services:
   n8n:
     image: n8nio/n8n:latest
     container_name: n8n
     restart: unless-stopped
+    ports:
+      - "${N8N_PORT}"
+    deploy:
+      resources:
+        limits:
+          memory: ${N8N_MEMORY_LIMIT}
     environment:
-      - N8N_HOST=n8n.${DOMAIN}
+      - N8N_HOST=${N8N_SUBDOMAIN}.${DOMAIN}
       - N8N_PROTOCOL=https
-      - N8N_PORT=5678
-      - N8N_EDITOR_BASE_URL=https://n8n.${DOMAIN}
+      - N8N_PORT=${N8N_CONTAINER_PORT}
+      - N8N_EDITOR_BASE_URL=https://${N8N_SUBDOMAIN}.${DOMAIN}
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=postgres
-      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_PORT=${POSTGRES_CONTAINER_PORT}
       - DB_POSTGRESDB_DATABASE=n8n
       - DB_POSTGRESDB_USER=postgres
       - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
-      - WEBHOOK_URL=https://n8n.${DOMAIN}/
+      - WEBHOOK_URL=https://${N8N_SUBDOMAIN}.${DOMAIN}/
       - GENERIC_TIMEZONE=Europe/Berlin
       - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
       - N8N_DIAGNOSTICS_ENABLED=false
@@ -29,16 +33,16 @@ services:
       - ../data/n8n:/home/node/.n8n
       - ../shared:/data/shared
     networks:
-      - traefik_network
+      - ${TRAEFIK_NETWORK}
       - n8n_network
     extra_hosts:
       - "host.docker.internal:host-gateway"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.n8n.rule=Host(`n8n.${DOMAIN}`)"
+      - "traefik.http.routers.n8n.rule=Host(`${N8N_SUBDOMAIN}.${DOMAIN}`)"
       - "traefik.http.routers.n8n.entrypoints=websecure"
       - "traefik.http.routers.n8n.tls=true"
-      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
+      - "traefik.http.services.n8n.loadbalancer.server.port=${N8N_CONTAINER_PORT}"
     depends_on:
       - postgres
 
@@ -46,6 +50,10 @@ services:
     image: postgres:latest
     container_name: postgres
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: ${POSTGRES_MEMORY_LIMIT}
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -55,10 +63,10 @@ services:
     networks:
       - n8n_network
     ports:
-      - "127.0.0.1:5433:5432"
+      - "127.0.0.1:${POSTGRES_HOST_PORT}:${POSTGRES_CONTAINER_PORT}"
 
 networks:
-  traefik_network:
+  ${TRAEFIK_NETWORK}:
     external: true
   n8n_network:
     driver: bridge

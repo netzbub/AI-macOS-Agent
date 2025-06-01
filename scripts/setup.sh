@@ -5,7 +5,9 @@
 
 # Load environment variables
 if [ -f .env ]; then
+  set -a
   source .env
+  set +a
 else
   echo "Error: .env file not found"
   echo "Please copy .env.example to .env and edit it with your settings"
@@ -17,7 +19,7 @@ BASE_DIR="$(pwd)"
 
 # Colors for output
 GREEN='\033[0;32m'
-BLUE='\033[0;34m'
+BLUE='\033[0;94m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
@@ -46,8 +48,8 @@ if ! command -v mkcert &> /dev/null; then
 fi
 
 # Check if Ollama is running
-if ! curl -s "http://localhost:${OLLAMA_PORT}/api/tags" &> /dev/null; then
-    echo "Ollama is not running on port ${OLLAMA_PORT}"
+if ! curl -s "http://${OLLAMA_HOST}:${OLLAMA_PORT}/api/tags" &> /dev/null; then
+    echo "Ollama is not running on ${OLLAMA_HOST}:${OLLAMA_PORT}"
     echo "Please start Ollama first"
     exit 1
 fi
@@ -57,13 +59,13 @@ echo ""
 
 # Display /etc/hosts requirement
 echo -e "${YELLOW}Important: Please add these lines to your /etc/hosts file:${NC}"
-echo -e "${BLUE}127.0.0.1   home.arpa${NC}"
-echo -e "${BLUE}127.0.0.1   luma.home.arpa${NC}"
-echo -e "${BLUE}127.0.0.1   n8n.home.arpa${NC}"
-echo -e "${BLUE}127.0.0.1   agent.home.arpa${NC}"
-echo -e "${BLUE}127.0.0.1   traefik.home.arpa${NC}"
-echo -e "${BLUE}127.0.0.1   chat.home.arpa${NC}"
-echo -e "${BLUE}127.0.0.1   portainer.home.arpa${NC}"
+echo -e "${BLUE}127.0.0.1   ${DOMAIN}${NC}"
+echo -e "${BLUE}127.0.0.1   ${LUMA_SUBDOMAIN}.${DOMAIN}${NC}"
+echo -e "${BLUE}127.0.0.1   ${N8N_SUBDOMAIN}.${DOMAIN}${NC}"
+echo -e "${BLUE}127.0.0.1   ${AGENT_SUBDOMAIN}.${DOMAIN}${NC}"
+echo -e "${BLUE}127.0.0.1   ${TRAEFIK_SUBDOMAIN}.${DOMAIN}${NC}"
+echo -e "${BLUE}127.0.0.1   ${CHAT_SUBDOMAIN}.${DOMAIN}${NC}"
+echo -e "${BLUE}127.0.0.1   ${PORTAINER_SUBDOMAIN}.${DOMAIN}${NC}"
 echo ""
 echo -e "You can do this by running:"
 echo -e "${GREEN}sudo nano /etc/hosts${NC}"
@@ -77,6 +79,7 @@ mkdir -p "$BASE_DIR/config/traefik/certs"
 mkdir -p "$BASE_DIR/data/astroluma"
 mkdir -p "$BASE_DIR/data/n8n"
 mkdir -p "$BASE_DIR/data/postgres"
+mkdir -p "$BASE_DIR/data/mongodb"
 mkdir -p "$BASE_DIR/data/agent-zero"
 mkdir -p "$BASE_DIR/data/open-webui"
 mkdir -p "$BASE_DIR/data/portainer"
@@ -88,44 +91,18 @@ echo ""
 
 # Create Docker network
 echo -e "${YELLOW}Creating Docker network...${NC}"
-if ! docker network ls | grep -q "traefik_network"; then
-    docker network create traefik_network
-    echo -e "${GREEN}Docker network 'traefik_network' created!${NC}"
+if ! docker network ls | grep -q "${TRAEFIK_NETWORK}"; then
+    docker network create ${TRAEFIK_NETWORK}
+    echo -e "${GREEN}Docker network '${TRAEFIK_NETWORK}' created!${NC}"
 else
-    echo -e "${GREEN}Docker network 'traefik_network' already exists!${NC}"
+    echo -e "${GREEN}Docker network '${TRAEFIK_NETWORK}' already exists!${NC}"
 fi
 echo ""
 
-# Fix SSL certificates for Safari
-echo -e "${YELLOW}Setting up SSL certificates for Safari compatibility...${NC}"
-echo "This will ensure certificates are properly trusted by Safari"
-
-# Reinstall mkcert CA
-mkcert -install
-
-# Get the mkcert CA location
-CA_PATH=$(mkcert -CAROOT)
-echo "CA Root directory: $CA_PATH"
-
-# Import the CA into the System keychain
-echo "Importing CA into System keychain..."
-sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "$CA_PATH/rootCA.pem" 2>/dev/null || true
-
-# Generate SSL certificates
-mkdir -p "$BASE_DIR/config/traefik/certs"
-cd "$BASE_DIR/config/traefik/certs"
-mkcert "${DOMAIN}" "*.${DOMAIN}"
-
-# Trust the specific certificate
-echo "Adding certificate to System keychain..."
-sudo security add-trusted-cert -d -r trustAsRoot -k /Library/Keychains/System.keychain "${DOMAIN}+1.pem" 2>/dev/null || true
-
-cd "$BASE_DIR"
-echo -e "${GREEN}SSL certificates configured for Safari!${NC}"
-echo ""
-
-# Configure Traefik (using existing config)
-echo -e "${YELLOW}Traefik configuration already exists - keeping current setup${NC}"
+# Generate SSL certificates using the updated script
+echo -e "${YELLOW}Setting up SSL certificates...${NC}"
+./scripts/generate-certs.sh
+echo -e "${GREEN}SSL certificates configured!${NC}"
 echo ""
 
 # Start services
@@ -133,12 +110,12 @@ echo -e "${YELLOW}Starting all services...${NC}"
 echo "This may take a few minutes..."
 
 cd "$BASE_DIR"
-docker-compose -f docker-compose/traefik.yml --env-file .env up -d
-docker-compose -f docker-compose/astroluma.yml --env-file .env up -d
-docker-compose -f docker-compose/n8n.yml --env-file .env up -d
-docker-compose -f docker-compose/agent-zero.yml --env-file .env up -d
-docker-compose -f docker-compose/open-webui.yml --env-file .env up -d
-docker-compose -f docker-compose/portainer.yml --env-file .env up -d
+docker compose -f docker-compose/traefik.yml --env-file .env up -d
+docker compose -f docker-compose/astroluma.yml --env-file .env up -d
+docker compose -f docker-compose/n8n.yml --env-file .env up -d
+docker compose -f docker-compose/agent-zero.yml --env-file .env up -d
+docker compose -f docker-compose/open-webui.yml --env-file .env up -d
+docker compose -f docker-compose/portainer.yml --env-file .env up -d
 
 echo -e "${GREEN}All services started!${NC}"
 echo ""
@@ -149,7 +126,7 @@ echo "Please wait a moment for all services to initialize..."
 sleep 20
 
 # Check if containers are running
-containers=("traefik" "astroluma" "n8n" "postgres" "agent-zero" "open-webui" "portainer")
+containers=("traefik" "astroluma" "n8n" "postgres" "mongodb" "agent-zero" "open-webui" "portainer")
 failed_containers=0
 
 for container in "${containers[@]}"; do
@@ -172,16 +149,16 @@ echo ""
 echo -e "${GREEN}Your AI Workbench is ready! Access these services:${NC}"
 echo ""
 echo -e "🤖 ${YELLOW}AI Chat Interface:${NC}"
-echo -e "   Open-WebUI: ${GREEN}https://chat.${DOMAIN}${NC}"
+echo -e "   Open-WebUI: ${GREEN}https://${CHAT_SUBDOMAIN}.${DOMAIN}${NC}"
 echo ""
 echo -e "🔧 ${YELLOW}AI Tools & Automation:${NC}"
-echo -e "   Agent Zero: ${GREEN}https://agent.${DOMAIN}${NC}"
-echo -e "   n8n Workflows: ${GREEN}https://n8n.${DOMAIN}${NC}"
-echo -e "   Astroluma: ${GREEN}https://luma.${DOMAIN}${NC}"
+echo -e "   Agent Zero: ${GREEN}https://${AGENT_SUBDOMAIN}.${DOMAIN}${NC}"
+echo -e "   n8n Workflows: ${GREEN}https://${N8N_SUBDOMAIN}.${DOMAIN}${NC}"
+echo -e "   Astroluma: ${GREEN}https://${LUMA_SUBDOMAIN}.${DOMAIN}${NC}"
 echo ""
 echo -e "🐳 ${YELLOW}Container Management:${NC}"
-echo -e "   Portainer: ${GREEN}https://portainer.${DOMAIN}${NC}"
-echo -e "   Traefik Dashboard: ${GREEN}https://traefik.${DOMAIN}${NC}"
+echo -e "   Portainer: ${GREEN}https://${PORTAINER_SUBDOMAIN}.${DOMAIN}${NC}"
+echo -e "   Traefik Dashboard: ${GREEN}https://${TRAEFIK_SUBDOMAIN}.${DOMAIN}${NC}"
 echo ""
 echo -e "${YELLOW}Important Notes:${NC}"
 echo -e "• Open-WebUI connects automatically to your local Ollama"

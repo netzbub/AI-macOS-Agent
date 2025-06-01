@@ -5,7 +5,9 @@
 
 # Load environment variables
 if [ -f ../.env ]; then
+  set -a
   source ../.env
+  set +a
 else
   echo "Error: .env file not found"
   echo "Please copy .env.example to .env and edit it with your settings"
@@ -37,20 +39,36 @@ rm -rf "$CERT_DIR"
 mkdir -p "$CERT_DIR"
 cd "$CERT_DIR"
 
-# Generate new certificates
-mkcert "${DOMAIN}" "*.${DOMAIN}"
+# Build the domain list from environment variables
+DOMAINS=(
+    "${AGENT_SUBDOMAIN}.${DOMAIN}"
+    "${CHAT_SUBDOMAIN}.${DOMAIN}"
+    "${LUMA_SUBDOMAIN}.${DOMAIN}"
+    "${N8N_SUBDOMAIN}.${DOMAIN}"
+    "${PORTAINER_SUBDOMAIN}.${DOMAIN}"
+    "${TRAEFIK_SUBDOMAIN}.${DOMAIN}"
+)
 
-# Verify certificates exist
-if [ -f "${DOMAIN}+1.pem" ] && [ -f "${DOMAIN}+1-key.pem" ]; then
-    echo "✓ Certificates regenerated successfully"
-else
-    echo "✗ Certificate generation failed!"
-    exit 1
-fi
+# Generate certificates for all domains
+echo "Generating certificates for domains: ${DOMAINS[*]}"
+mkcert "${DOMAINS[@]}"
+
+# Update Traefik TLS configuration
+cat > ../dynamic/tls.yml << EOF
+tls:
+  certificates:
+    - certFile: "/certs/${DOMAINS[0]}+$(( ${#DOMAINS[@]} - 1 )).pem"
+      keyFile: "/certs/${DOMAINS[0]}+$(( ${#DOMAINS[@]} - 1 ))-key.pem"
+  stores:
+    default:
+      defaultCertificate:
+        certFile: "/certs/${DOMAINS[0]}+$(( ${#DOMAINS[@]} - 1 )).pem"
+        keyFile: "/certs/${DOMAINS[0]}+$(( ${#DOMAINS[@]} - 1 ))-key.pem"
+EOF
 
 # Trust the specific certificate
-echo "Adding certificate to System keychain..."
-sudo security add-trusted-cert -d -r trustAsRoot -k /Library/Keychains/System.keychain "${DOMAIN}+1.pem"
+echo "Adding certificates to System keychain..."
+sudo security add-trusted-cert -d -r trustAsRoot -k /Library/Keychains/System.keychain "${DOMAINS[0]}+$(( ${#DOMAINS[@]} - 1 )).pem"
 
 echo ""
 echo "SSL certificate fix complete!"
@@ -58,7 +76,13 @@ echo ""
 echo "Please:"
 echo "1. Restart Safari completely"
 echo "2. Clear Safari's cache (Cmd+Option+E)"
-echo "3. Visit https://${DOMAIN} - it should now be trusted"
+echo "3. Visit your domains:"
+for domain in "${DOMAINS[@]}"; do
+    echo "   - https://$domain"
+done
 echo ""
 echo "If you still see warnings, try:"
-echo "- Keychain Access → Certificates → find '${DOMAIN}' → Get Info → Trust → Always Trust"
+echo "- Open Keychain Access"
+echo "- Go to Certificates"
+echo "- Find and select your certificates"
+echo "- Get Info → Trust → Always Trust"

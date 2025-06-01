@@ -1,22 +1,26 @@
-version: '3'
-
 services:
   portainer:
     image: portainer/portainer-ce:latest
     container_name: portainer
     restart: unless-stopped
+    ports:
+      - "${PORTAINER_PORT}"
+    deploy:
+      resources:
+        limits:
+          memory: ${PORTAINER_MEMORY_LIMIT}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ../data/portainer:/data
     networks:
-      - traefik_network
+      - ${TRAEFIK_NETWORK}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN}`)"
+      - "traefik.http.routers.portainer.rule=Host(`${PORTAINER_SUBDOMAIN}.${DOMAIN}`)"
       - "traefik.http.routers.portainer.entrypoints=websecure"
       - "traefik.http.routers.portainer.tls=true"
-      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      - "traefik.http.services.portainer.loadbalancer.server.port=${PORTAINER_CONTAINER_PORT}"
 
 networks:
-  traefik_network:
+  ${TRAEFIK_NETWORK}:
     external: true

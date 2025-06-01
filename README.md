@@ -3,7 +3,7 @@
 A comprehensive toolkit for running AI services locally on macOS in a containerized environment, combining the power of n8n workflow automation, Agent Zero AI assitant and Ollama running different LLMs inside Open WebUI.
 
 ## *"Good artists copy, great artists steal."*  
-(PabloPicasso)  
+(Pablo Picasso)  
 
 ![Feininger](https://github.com/netzbub/AI-macOS-Agent/blob/main/docs/images/feininger.jpg)  
 Lyonel Feininger
@@ -28,8 +28,7 @@ Lyonel Feininger
     - [Checking Logs](#checking-logs)
     - [License](#license)
     - [Acknowledgments](#acknowledgments)
-
-
+    
 ### Inspiration
 
 The following repositories inspired me to build my own local **AI macOS Agent** - up to now a first sketch on the wall and it will have to be improved over time.
@@ -41,9 +40,9 @@ The following repositories inspired me to build my own local **AI macOS Agent** 
 ### Overview
 
 This project integrates three powerful AI frameworks:
-- **AI macOS Agent**: Provides n8n workflow automation with 400+ integrations and AI components
-- **Agent Zero**: Offers AI agents with terminal and web interfaces
-- **Open WebUI**: Frontend for Ollama and several locally hosted LLMs
+- **n8n**: Workflow automation with 400+ integrations and AI components
+- **Agent Zero**: AI agents with terminal and web interfaces
+- **Open WebUI**: as frontend for **Ollama** and various locally hosted LLMs
 
 All services are accessible through a central Astroluma dashboard and secured with local SSL certificates.
 
@@ -52,31 +51,32 @@ All services are accessible through a central Astroluma dashboard and secured wi
 - **Central Dashboard**: Astroluma for managing all services
 - **Workflow Automation**: n8n with 400+ integrations and AI components
 - **AI Agents**: Agent Zero for terminal and web-based AI assistance
-- **Local LLM Integration**: Direct connection to locally installed Ollama via host.docker.internal bridge, allowing containers to access Ollama running on the host system
-- **Open WebUI** use different free LLMs in your favourite browser free and privacy focused
+- **Local LLM Integration**: Direct connection to locally installed Ollama
+- **Open WebUI**: Use different LLMs in your browser, free and privacy-focused
 - **SSL Security**: Local domains secured with mkcert certificates
-- **Reverse Proxy**: Traefik for routing and SSL termination
-- **Backup Solution**: Optimized for Synology NAS
+- **Reverse Proxy**: Traefik for routing and SSL termination with enhanced security
+- **Monitoring**: Prometheus metrics and JSON logging
+- **Backup Solution**: Optimized for Synology NAS with configurable retention
 
 ### Prerequisites
 
 - macOS (tested on macOS 15.5)
 - [Homebrew](https://brew.sh/)
 - [Docker/Orbstack](https://orbstack.dev/)
-- [Ollama](https://ollama.ai/) - installed locally, not locally in a container
-- [mkcert](https://github.com/FiloSottile/mkcert) - it has to be installed on your machine before running the installer, the bash-script will setup the SSL Certificates for the local domain and subdomain which you setup in the .env file.
+- [Ollama](https://ollama.ai/) - installed locally
+- [mkcert](https://github.com/FiloSottile/mkcert)
 
 **Be very (!) careful** with choosing a TLD for your local network. The most recommended two ways, that will not conflict with existing local or public domains and with public DNS, are either to use [.home.arpa](https://home.arpa). The second recommended way is to use a subdomain of a domain, that you 'own' like [sub.mydomain.com](https://sub.mydomain.com). Be aware, that mkcert only supports sub.mydomain.com but will not work with next.sub.mydomain.com.
 
 Add to /etc/hosts:
-```
-127.0.0.1   mac.home.arpa
-127.0.0.1   luma.home.arpa
-127.0.0.1   n8n.home.arpa
-127.0.0.1   agent.home.arpa
-127.0.0.1   traefik.home.arpa
-127.0.0.1   chat.home.arpa
-127.0.0.1   portainer.home.arpa  
+```bash
+127.0.0.1   ${DOMAIN}
+127.0.0.1   ${LUMA_SUBDOMAIN}.${DOMAIN}
+127.0.0.1   ${N8N_SUBDOMAIN}.${DOMAIN}
+127.0.0.1   ${AGENT_SUBDOMAIN}.${DOMAIN}
+127.0.0.1   ${TRAEFIK_SUBDOMAIN}.${DOMAIN}
+127.0.0.1   ${CHAT_SUBDOMAIN}.${DOMAIN}
+127.0.0.1   ${PORTAINER_SUBDOMAIN}.${DOMAIN}
 ```
 
 ### Installation
@@ -87,10 +87,10 @@ Add to /etc/hosts:
    cd ai-macos-agent
    ```
 
-2. Copy the example environment file and edit it:
+2. Copy and configure environment file:
    ```bash
    cp .env.example .env
-   # Edit .env with your preferred settings
+   # Edit .env with your settings
    ```
 
 3. Run the setup script:
@@ -99,75 +99,82 @@ Add to /etc/hosts:
    ./scripts/setup.sh
    ```
 
-4. Access the services:
-   - Dashboard: https://luma.home.arpa
-   - n8n: https://n8n.home.arpa
-   - Ollama: https://chats.home.arpa
-   - Agent Zero: https://agent.home.arpa
-   - Portainer: https://portainer.home.arpa
-   - Traefik: https://traefik.home.arpa
-
 ### Configuration
 
-The central `.env` file contains all configuration options:
+Key settings in `.env`:
 
-```
-# General Settings
-DOMAIN=home.arpa
+```bash
+# Domain Configuration
+DOMAIN=your.domain
+LUMA_SUBDOMAIN=luma
+N8N_SUBDOMAIN=n8n
+AGENT_SUBDOMAIN=agent
+TRAEFIK_SUBDOMAIN=traefik
+CHAT_SUBDOMAIN=chat
+PORTAINER_SUBDOMAIN=portainer
 
-# Port Settings
+# Network Settings
+TRAEFIK_NETWORK=traefik_network
+
+# Service Ports
 N8N_PORT=5678
 ASTROLUMA_PORT=8000
 AGENT_ZERO_PORT=80
-TRAEFIK_DASHBOARD_PORT=8080
-
-# n8n Settings
-N8N_ENCRYPTION_KEY=your-encryption-key
-POSTGRES_PASSWORD=your-postgres-password
+TRAEFIK_PORT=8080
+MONGODB_PORT=27017
 
 # Ollama Integration
 OLLAMA_HOST=host.docker.internal
 OLLAMA_PORT=11434
+OLLAMA_MODEL=llama2
+
+# Memory Limits
+N8N_MEMORY_LIMIT=8G
+AGENT_MEMORY_LIMIT=8G
+ASTROLUMA_MEMORY_LIMIT=2G
+MONGODB_MEMORY_LIMIT=4G
+
+# Backup Configuration
+BACKUP_KEEP_DAILY=7
+BACKUP_KEEP_WEEKLY=4
+BACKUP_KEEP_MONTHLY=6
 ```
 
 ### Directory Structure
 
 ```
 .
-├── .env.example
-├── .git
-├── .gitignore
-├── .history
-├── config
-│   └── traefik
-│       ├── dynamic
-│       │   └── tls.yml
-│       └── traefik.yml
-│       └── certs/
+├── config/
+│   └── traefik/
+│       ├── dynamic/
+│       ├── certs/
+│       └── traefik.yml
 ├── data/
 │   ├── agent-zero/
 │   ├── astroluma/
+│   ├── mongodb/
 │   ├── n8n/
-│   └── postgres/
-├── docker-compose
-│   ├── agent-zero.yml
-│   ├── astroluma.yml
-│   ├── n8n.yml
-│   └── traefik.yml
-├── docs
-│   ├── CODE_OF_CONDUCT.md
-│   ├── CONTRIBUTING.md
-│   └── images
-│       └── feininger.jpg
-├── README.md
-├── scripts
-│   ├── backup-synology.sh
-│   ├── generate-certs.sh
-│   ├── setup-n8n.sh
-│   ├── setup-volumes.sh
-│   ├── setup.sh
-│   └── validate-services.sh
-└── shared
+│   ├── open-webui/
+│   ├── portainer/
+│   └── postgres/
+├── docker-compose/
+│   ├── agent-zero.yml
+│   ├── astroluma.yml
+│   ├── n8n.yml
+│   ├── open-webui.yml
+│   ├── portainer.yml
+│   └── traefik.yml
+├── scripts/
+│   ├── backup-synology.sh
+│   ├── fix-ssl-safari.sh
+│   ├── generate-certs.sh
+│   ├── setup-n8n.sh
+│   ├── setup-volumes.sh
+│   ├── setup.sh
+│   └── validate-services.sh
+└── shared/
+    ├── data/
+    └── documents/
 ```
 
 ### Usage
@@ -175,10 +182,14 @@ OLLAMA_PORT=11434
 ### Accessing Services
 
 All services are accessible through your browser using the following URLs:
-- **Astroluma Dashboard**: https://luma.home.arpa
-- **n8n Workflow Automation**: https://n8n.home.arpa
+
 - **Agent Zero**: https://agent.home.arpa
+- **n8n Workflow Automation**: https://n8n.home.arpa
+- **Open WebUI (Ollama)** - https://chat.home.arpa
+- **Astroluma** - https://luma.home.arpa
+- **Portainer** - https://portainer.home.arpa
 - **Traefik Dashboard**: https://traefik.home.arpa
+
 
 ### Working with Local Files
 

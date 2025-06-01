@@ -1,4 +1,8 @@
 # Traefik Static Configuration
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
 api:
   dashboard: true
   insecure: false
@@ -11,18 +15,46 @@ entryPoints:
         entryPoint:
           to: websecure
           scheme: https
+          permanent: true
   websecure:
     address: ":443"
+    http:
+      tls:
+        certResolver: default
+        domains:
+          - main: "${DOMAIN}"
+            sans:
+              - "*.${DOMAIN}"
 
 providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
+    network: "${TRAEFIK_NETWORK}"
+    watch: true
   file:
     directory: "/etc/traefik/dynamic"
     watch: true
 
 log:
-  level: "INFO"
+  level: "${LOG_LEVEL:-INFO}"
+  format: "json"
 
-accessLog: {}
+accessLog:
+  format: "json"
+  fields:
+    defaultMode: "keep"
+    headers:
+      defaultMode: "keep"
+
+pilot:
+  dashboard: false
+
+experimental:
+  http3: false
+
+metrics:
+  prometheus: {}
+
+ping:
+  entryPoint: "web"

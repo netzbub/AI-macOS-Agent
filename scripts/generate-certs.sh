@@ -4,13 +4,9 @@
 # This script should be run on the host machine, not in a container
 
 # Load environment variables
-if [ -f ../.env ]; then
-  source ../.env
-else
-  echo "Error: .env file not found"
-  echo "Please copy .env.example to .env and edit it with your settings"
-  exit 1
-fi
+set -a
+source ../.env
+set +a
 
 # Check if mkcert is installed
 if ! command -v mkcert &> /dev/null; then
@@ -23,22 +19,34 @@ fi
 CERT_DIR="../config/traefik/certs"
 mkdir -p "$CERT_DIR"
 
-# Change to the certificates directory
+# Build the domain list from environment variables
+DOMAINS=(
+    "${AGENT_SUBDOMAIN}.${DOMAIN}"
+    "${CHAT_SUBDOMAIN}.${DOMAIN}"
+    "${LUMA_SUBDOMAIN}.${DOMAIN}"
+    "${N8N_SUBDOMAIN}.${DOMAIN}"
+    "${PORTAINER_SUBDOMAIN}.${DOMAIN}"
+    "${TRAEFIK_SUBDOMAIN}.${DOMAIN}"
+)
+
+# Change to certificates directory
 cd "$CERT_DIR"
 
-# Generate certificates for domain and all subdomains
-echo "Generating certificates for ${DOMAIN} and *.${DOMAIN}..."
-mkcert -install
-mkcert "${DOMAIN}" "*.${DOMAIN}"
+# Generate certificates for all domains
+echo "Generating certificates for domains: ${DOMAINS[*]}"
+mkcert "${DOMAINS[@]}"
 
-# Verify certificates were created
-if [ -f "${DOMAIN}+1.pem" ] && [ -f "${DOMAIN}+1-key.pem" ]; then
-    echo "Certificates successfully generated at:"
-    echo "$CERT_DIR/${DOMAIN}+1.pem"
-    echo "$CERT_DIR/${DOMAIN}+1-key.pem"
-else
-    echo "Certificate generation failed!"
-    exit 1
-fi
+# Update Traefik TLS configuration
+cat > ../dynamic/tls.yml << EOF
+tls:
+  certificates:
+    - certFile: "/certs/${DOMAINS[0]}+$(( ${#DOMAINS[@]} - 1 )).pem"
+      keyFile: "/certs/${DOMAINS[0]}+$(( ${#DOMAINS[@]} - 1 ))-key.pem"
+  stores:
+    default:
+      defaultCertificate:
+        certFile: "/certs/${DOMAINS[0]}+$(( ${#DOMAINS[@]} - 1 )).pem"
+        keyFile: "/certs/${DOMAINS[0]}+$(( ${#DOMAINS[@]} - 1 ))-key.pem"
+EOF
 
-echo "SSL certificate setup complete!"
+echo "Certificates generated and Traefik configuration updated"

@@ -1,9 +1,9 @@
 tls:
   certificates:
-    - certFile: "/certs/${DOMAIN}+1.pem"
-      keyFile: "/certs/${DOMAIN}+1-key.pem"
+    - certFile: "/certs/agent.home.arpa+6.pem"
+      keyFile: "/certs/agent.home.arpa+6-key.pem"
   stores:
     default:
       defaultCertificate:
-        certFile: "/certs/${DOMAIN}+1.pem"
-        keyFile: "/certs/${DOMAIN}+1-key.pem"
+        certFile: "/certs/agent.home.arpa+6.pem"
+        keyFile: "/certs/agent.home.arpa+6-key.pem"

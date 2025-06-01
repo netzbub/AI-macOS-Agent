@@ -5,7 +5,9 @@
 
 # Load environment variables
 if [ -f ../.env ]; then
+  set -a
   source ../.env
+  set +a
 else
   echo "Error: .env file not found"
   echo "Please copy .env.example to .env and edit it with your settings"
@@ -16,7 +18,7 @@ fi
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
+BLUE='\033[0;94m'
 NC='\033[0m' # No Color
 
 # Function to check if a URL is accessible
@@ -62,13 +64,13 @@ if ! command -v docker &> /dev/null; then
 fi
 
 # Check if the traefik network exists
-if ! docker network ls | grep -q "traefik_network"; then
-    echo -e "${RED}Traefik network does not exist. Please run setup script first.${NC}"
+if ! docker network ls | grep -q "${TRAEFIK_NETWORK}"; then
+    echo -e "${RED}Network ${TRAEFIK_NETWORK} does not exist. Please run setup script first.${NC}"
     exit 1
 fi
 
 # Check containers
-containers=("traefik" "astroluma" "n8n" "postgres" "agent-zero" "open-webui" "portainer")
+containers=("traefik" "astroluma" "n8n" "postgres" "mongodb" "agent-zero" "open-webui" "portainer")
 failed_containers=0
 
 echo -e "${YELLOW}Checking all containers...${NC}"
@@ -81,12 +83,12 @@ echo ""
 
 # Check URLs
 urls=(
-    "https://chat.${DOMAIN}|Open-WebUI (AI Chat)"
-    "https://portainer.${DOMAIN}|Portainer (Container Management)"
-    "https://luma.${DOMAIN}|Astroluma Dashboard"
-    "https://n8n.${DOMAIN}|n8n Workflow Automation"
-    "https://agent.${DOMAIN}|Agent Zero"
-    "https://traefik.${DOMAIN}|Traefik Dashboard"
+    "https://${CHAT_SUBDOMAIN}.${DOMAIN}|Open-WebUI (AI Chat)"
+    "https://${PORTAINER_SUBDOMAIN}.${DOMAIN}|Portainer (Container Management)"
+    "https://${LUMA_SUBDOMAIN}.${DOMAIN}|Astroluma Dashboard"
+    "https://${N8N_SUBDOMAIN}.${DOMAIN}|n8n Workflow Automation"
+    "https://${AGENT_SUBDOMAIN}.${DOMAIN}|Agent Zero"
+    "https://${TRAEFIK_SUBDOMAIN}.${DOMAIN}|Traefik Dashboard"
 )
 failed_urls=0
 
@@ -102,7 +104,7 @@ echo ""
 # Check Ollama connection
 echo -e "${YELLOW}Testing backend services...${NC}"
 echo -e "Testing ${YELLOW}Ollama connection${NC}..."
-if curl -s "http://localhost:${OLLAMA_PORT}/api/tags" | grep -q "models"; then
+if curl -s "http://${OLLAMA_HOST}:${OLLAMA_PORT}/api/tags" | grep -q "models"; then
     echo -e "${GREEN}✓ Ollama API is accessible${NC}"
 else
     echo -e "${RED}✗ Ollama API is not accessible${NC}"
@@ -131,16 +133,16 @@ if [ $failed_containers -eq 0 ] && [ $failed_urls -eq 0 ]; then
     echo -e "${GREEN}Your AI Workbench is fully operational:${NC}"
     echo ""
     echo -e "🤖 ${YELLOW}AI Chat Interface:${NC}"
-    echo -e "   Open-WebUI: ${GREEN}https://chat.${DOMAIN}${NC}"
+    echo -e "   Open-WebUI: ${GREEN}https://${CHAT_SUBDOMAIN}.${DOMAIN}${NC}"
     echo ""
     echo -e "🔧 ${YELLOW}AI Tools & Automation:${NC}"
-    echo -e "   Agent Zero: ${GREEN}https://agent.${DOMAIN}${NC}"
-    echo -e "   n8n Workflows: ${GREEN}https://n8n.${DOMAIN}${NC}"
-    echo -e "   Astroluma: ${GREEN}https://luma.${DOMAIN}${NC}"
+    echo -e "   Agent Zero: ${GREEN}https://${AGENT_SUBDOMAIN}.${DOMAIN}${NC}"
+    echo -e "   n8n Workflows: ${GREEN}https://${N8N_SUBDOMAIN}.${DOMAIN}${NC}"
+    echo -e "   Astroluma: ${GREEN}https://${LUMA_SUBDOMAIN}.${DOMAIN}${NC}"
     echo ""
     echo -e "🐳 ${YELLOW}Management Interfaces:${NC}"
-    echo -e "   Portainer: ${GREEN}https://portainer.${DOMAIN}${NC}"
-    echo -e "   Traefik Dashboard: ${GREEN}https://traefik.${DOMAIN}${NC}"
+    echo -e "   Portainer: ${GREEN}https://${PORTAINER_SUBDOMAIN}.${DOMAIN}${NC}"
+    echo -e "   Traefik Dashboard: ${GREEN}https://${TRAEFIK_SUBDOMAIN}.${DOMAIN}${NC}"
 else
     echo -e "${RED}⚠️  Some services are not running correctly.${NC}"
     echo ""
@@ -150,8 +152,8 @@ else
     echo ""
     echo -e "${YELLOW}Troubleshooting:${NC}"
     echo -e "• Check container logs: ${GREEN}docker logs <container_name>${NC}"
-    echo -e "• Restart services: ${GREEN}docker-compose restart${NC}"
-    echo -e "• Check /etc/hosts entries for *.home.arpa domains"
+    echo -e "• Restart services: ${GREEN}docker compose restart${NC}"
+    echo -e "• Check /etc/hosts entries for your domains"
     echo -e "• Verify SSL certificates are trusted in keychain"
 fi
 echo ""

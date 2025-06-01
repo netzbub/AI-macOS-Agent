@@ -6,7 +6,9 @@
 
 # Load environment variables
 if [ -f ../.env ]; then
+  set -a
   source ../.env
+  set +a
 else
   echo "Error: .env file not found"
   echo "Please copy .env.example to .env and edit it with your settings"
@@ -41,16 +43,36 @@ borg create --stats --progress \
     ${BORG_REPO}::ai_projects-${DATE} \
     ${SOURCE_DIR} \
     --exclude "${SOURCE_DIR}/data/postgres" \
+    --exclude "${SOURCE_DIR}/data/mongodb" \
+    --exclude "${SOURCE_DIR}/data/open-webui" \
+    --exclude "${SOURCE_DIR}/data/portainer" \
+    --exclude "${SOURCE_DIR}/data/n8n" \
+    --exclude "${SOURCE_DIR}/data/astroluma" \
+    --exclude "${SOURCE_DIR}/data/agent-zero" \
     --exclude "*.log" \
-    --exclude "*.tmp"
+    --exclude "*.tmp" \
+    --exclude "*.pid" \
+    --exclude "*.sock" \
+    --exclude "node_modules" \
+    --exclude "__pycache__" \
+    --exclude ".git"
 
 # Prune old backups (keep 7 daily, 4 weekly, 6 monthly)
 echo "Pruning old backups..."
 borg prune --stats \
     ${BORG_REPO} \
-    --keep-daily=7 \
-    --keep-weekly=4 \
-    --keep-monthly=6
+    --keep-daily=${BACKUP_KEEP_DAILY:-7} \
+    --keep-weekly=${BACKUP_KEEP_WEEKLY:-4} \
+    --keep-monthly=${BACKUP_KEEP_MONTHLY:-6}
 
 echo "Backup completed successfully!"
-echo "Backup stored at: ${BORG_REPO}::ai_projects-${DATE}"
+echo ""
+echo "Backup details:"
+echo "- Repository: ${BORG_REPO}"
+echo "- Archive: ai_projects-${DATE}"
+echo "- Source: ${SOURCE_DIR}"
+echo ""
+echo "Retention policy:"
+echo "- Daily backups: ${BACKUP_KEEP_DAILY:-7}"
+echo "- Weekly backups: ${BACKUP_KEEP_WEEKLY:-4}"
+echo "- Monthly backups: ${BACKUP_KEEP_MONTHLY:-6}"

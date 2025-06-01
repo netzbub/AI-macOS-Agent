@@ -1,19 +1,21 @@
-version: '3'
-
 services:
   traefik:
     image: traefik:latest
     container_name: traefik
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "${TRAEFIK_PORT_HTTP}"
+      - "${TRAEFIK_PORT_HTTPS}"
+    deploy:
+      resources:
+        limits:
+          memory: ${TRAEFIK_MEMORY_LIMIT}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ../config/traefik:/etc/traefik
       - ../config/traefik/certs:/certs
     networks:
-      - traefik_network
+      - ${TRAEFIK_NETWORK}
     command:
       - "--api.dashboard=true"
       - "--api.insecure=false"
@@ -27,12 +29,12 @@ services:
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"
+      - "traefik.http.routers.traefik.rule=Host(`${TRAEFIK_SUBDOMAIN}.${DOMAIN}`)"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls=true"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.services.traefik.loadbalancer.server.port=${TRAEFIK_DASHBOARD_PORT}"
 
 networks:
-  traefik_network:
+  ${TRAEFIK_NETWORK}:
     external: true

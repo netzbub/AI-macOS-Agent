@@ -51,3 +51,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Edited .env.example - port conflicts
 - Edited agent-zero.yml - port conflicts
+
+## [1.0.4] - 2025-05-31
+
+### Added
+- MongoDB integration for improved data persistence
+- Prometheus metrics in Traefik
+- JSON logging for better traceability
+- Health check endpoints for all services
+- Additional security settings in Traefik
+
+### Changed
+- Comprehensive revision of all scripts for better environment variable usage:
+  - setup.sh: Improved service initialization
+  - validate-services.sh: Enhanced validation checks
+  - generate-certs.sh: Optimized SSL certificate generation
+  - fix-ssl-safari.sh: Improved SSL compatibility
+  - setup-n8n.sh: Enhanced Ollama integration
+  - setup-volumes.sh: New service directories
+  - backup-synology.sh: Improved backup configuration
+- Updated Traefik configuration with:
+  - Permanent HTTPS redirection
+  - Wildcard certificates for subdomains
+  - Enhanced TLS settings
+  - Network isolation
+- Optimized directory structure for all services
+- Enhanced backup exclusions and configurable retention periods
+
+### Security
+- Strengthened TLS configuration
+- Improved certificate management
+- Network isolation for services
+- Disabled unnecessary features

@@ -5,7 +5,9 @@
 
 # Load environment variables
 if [ -f ../.env ]; then
+  set -a
   source ../.env
+  set +a
 else
   echo "Error: .env file not found"
   echo "Please copy .env.example to .env and edit it with your settings"
@@ -39,7 +41,9 @@ cat > "$N8N_DIR/workflows/ollama_test.json" << EOF
       "parameters": {
         "prompt": "Hello, I'm testing the Ollama integration with n8n. Please respond with a short greeting.",
         "options": {
-          "model": "llama3"
+          "model": "${OLLAMA_MODEL}",
+          "host": "${OLLAMA_HOST}",
+          "port": "${OLLAMA_PORT}"
         }
       },
       "name": "Ollama",
@@ -78,4 +82,4 @@ echo "- File system operations"
 echo "- Web scraping tools"
 echo ""
 echo "A sample Ollama test workflow has been created."
-echo "Access n8n at https://n8n.${DOMAIN} once the services are running."
+echo "Access n8n at https://${N8N_SUBDOMAIN}.${DOMAIN} once the services are running."
