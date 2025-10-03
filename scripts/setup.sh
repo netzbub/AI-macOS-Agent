@@ -91,11 +91,11 @@ echo ""
 
 # Create Docker network
 echo -e "${YELLOW}Creating Docker network...${NC}"
-if ! docker network ls | grep -q "${TRAEFIK_NETWORK}"; then
-    docker network create ${TRAEFIK_NETWORK}
-    echo -e "${GREEN}Docker network '${TRAEFIK_NETWORK}' created!${NC}"
+if ! docker network ls | grep -q "traefik_network"; then
+    echo "Creating Docker network traefik_network..."
+    docker network create traefik_network
 else
-    echo -e "${GREEN}Docker network '${TRAEFIK_NETWORK}' already exists!${NC}"
+    echo "Docker network traefik_network already exists."
 fi
 echo ""
 

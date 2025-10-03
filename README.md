@@ -1,4 +1,4 @@
-# AI macOS Agent
+# AI macOS Agent - V 1.0.5
 
 A comprehensive toolkit for running AI services locally on macOS in a containerized environment, combining the power of n8n workflow automation, Agent Zero AI assitant and Ollama running different LLMs inside Open WebUI.
 
@@ -84,7 +84,7 @@ Add to /etc/hosts:
 1. Clone this repository:
    ```bash
    git clone https://github.com/netzbub/ai-macos-agent.git
-   cd ai-agents
+   cd ai-macos-agent
    ```
 
 2. Copy and configure environment file:
