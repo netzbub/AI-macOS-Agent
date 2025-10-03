@@ -84,7 +84,7 @@ Add to /etc/hosts:
 1. Clone this repository:
    ```bash
    git clone https://github.com/netzbub/ai-macos-agent.git
-   cd ai-macos-agent
+   cd ai-agents
    ```
 
 2. Copy and configure environment file:
