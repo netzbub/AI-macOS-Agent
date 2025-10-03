@@ -33,7 +33,7 @@ services:
       - ../data/n8n:/home/node/.n8n
       - ../shared:/data/shared
     networks:
-      - ${TRAEFIK_NETWORK}
+      - traefik_network
       - n8n_network
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -61,12 +61,9 @@ services:
     volumes:
       - ../data/postgres:/var/lib/postgresql/data
     networks:
-      - n8n_network
+      - traefik_network:
+          external: true
+      - n8n_network:
+          driver: bridge
     ports:
       - "127.0.0.1:${POSTGRES_HOST_PORT}:${POSTGRES_CONTAINER_PORT}"
-
-networks:
-  ${TRAEFIK_NETWORK}:
-    external: true
-  n8n_network:
-    driver: bridge

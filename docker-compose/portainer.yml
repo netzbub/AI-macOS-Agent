@@ -13,14 +13,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ../data/portainer:/data
     networks:
-      - ${TRAEFIK_NETWORK}
+      - traefik_network:
+          external: true
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.rule=Host(`${PORTAINER_SUBDOMAIN}.${DOMAIN}`)"
       - "traefik.http.routers.portainer.entrypoints=websecure"
       - "traefik.http.routers.portainer.tls=true"
-      - "traefik.http.services.portainer.loadbalancer.server.port=${PORTAINER_CONTAINER_PORT}"
-
-networks:
-  ${TRAEFIK_NETWORK}:
-    external: true
+      - "traefik.http.services.portainer.loadbalancer.server.port=${PORTAINER_CONTAINER_PORT}

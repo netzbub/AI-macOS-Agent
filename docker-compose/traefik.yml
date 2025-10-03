@@ -15,7 +15,8 @@ services:
       - ../config/traefik:/etc/traefik
       - ../config/traefik/certs:/certs
     networks:
-      - ${TRAEFIK_NETWORK}
+      - traefik_network:
+          external: true
     command:
       - "--api.dashboard=true"
       - "--api.insecure=false"
@@ -33,8 +34,4 @@ services:
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls=true"
       - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.services.traefik.loadbalancer.server.port=${TRAEFIK_DASHBOARD_PORT}"
-
-networks:
-  ${TRAEFIK_NETWORK}:
-    external: true
+      - "traefik.http.services.traefik.loadbalancer.server.port=${TRAEFIK_DASHBOARD_PORT}

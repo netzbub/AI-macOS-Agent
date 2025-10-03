@@ -34,8 +34,10 @@ services:
     volumes:
       - ../data/astroluma:/app/data
     networks:
-      - ${TRAEFIK_NETWORK}
-      - astroluma_network
+      - traefik_network:
+          external: true
+      - astroluma_network:
+          driver: bridge
     depends_on:
       - mongodb
     labels:
@@ -44,9 +46,3 @@ services:
       - "traefik.http.routers.astroluma.entrypoints=websecure"
       - "traefik.http.routers.astroluma.tls=true"
       - "traefik.http.services.astroluma.loadbalancer.server.port=${LUMA_CONTAINER_PORT}"
-
-networks:
-  ${TRAEFIK_NETWORK}:
-    external: true
-  astroluma_network:
-    driver: bridge

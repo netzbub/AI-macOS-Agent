@@ -22,7 +22,8 @@ services:
       - ../data/open-webui:/app/backend/data
       - ../shared:/app/shared
     networks:
-      - ${TRAEFIK_NETWORK}
+      - traefik_network:
+          external: true
     extra_hosts:
       - "host.docker.internal:host-gateway"
     labels:
@@ -31,7 +32,3 @@ services:
       - "traefik.http.routers.open-webui.entrypoints=websecure"
       - "traefik.http.routers.open-webui.tls=true"
       - "traefik.http.services.open-webui.loadbalancer.server.port=${CHAT_CONTAINER_PORT}"
-
-networks:
-  ${TRAEFIK_NETWORK}:
-    external: true
