@@ -93,12 +93,18 @@ Add to /etc/hosts:
    # Edit .env with your settings
    ```
 
-3. Run the setup script:
+3. Making the scripts executable:
    ```bash
    chmod +x scripts/setup.sh
+   chmod +x ./scripts/generate-certs.sh
+   ```
+
+3. Run the setup script:
+   ```bash
    ./scripts/setup.sh
    ```
 
+   
 ### Configuration
 
 Key settings in `.env`:
