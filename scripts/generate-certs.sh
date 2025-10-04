@@ -5,7 +5,7 @@
 
 # Load environment variables
 set -a
-source ../.env
+source ./.env
 set +a
 
 # Check if mkcert is installed
@@ -16,7 +16,7 @@ if ! command -v mkcert &> /dev/null; then
 fi
 
 # Create certificates directory if it doesn't exist
-CERT_DIR="../config/traefik/certs"
+CERT_DIR="./config/traefik/certs"
 mkdir -p "$CERT_DIR"
 
 # Build the domain list from environment variables
@@ -37,7 +37,7 @@ echo "Generating certificates for domains: ${DOMAINS[*]}"
 mkcert "${DOMAINS[@]}"
 
 # Update Traefik TLS configuration
-cat > ../dynamic/tls.yml << EOF
+cat > ./config/traefik/dynamic/tls.yml << EOF
 tls:
   certificates:
     - certFile: "/certs/${DOMAINS[0]}+$(( ${#DOMAINS[@]} - 1 )).pem"
