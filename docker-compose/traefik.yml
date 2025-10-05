@@ -6,8 +6,8 @@ services:
     container_name: traefik
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "${TRAEFIK_HOST_PORT_HTTP}:80"
+      - "${TRAEFIK_HOST_PORT_HTTPS}:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ../config/traefik:/etc/traefik
@@ -21,8 +21,8 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--providers.file.directory=/etc/traefik/dynamic"
       - "--providers.file.watch=true"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.address=:${TRAEFIK_CONTAINER_PORT_HTTP}"
+      - "--entrypoints.websecure.address=:${TRAEFIK_CONTAINER_PORT_HTTPS}"
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
     labels:

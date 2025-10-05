@@ -14,7 +14,7 @@ services:
     networks:
       - astroluma_network
     ports:
-      - "127.0.0.1:27017:27017"
+      - "127.0.0.1:${MONGODB_HOST_PORT}:27017"
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s

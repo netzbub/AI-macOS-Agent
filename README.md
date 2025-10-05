@@ -29,7 +29,6 @@ Lyonel Feininger
     - [License](#license)
     - [Acknowledgments](#acknowledgments)
 
-
 ### Inspiration
 
 The following repositories inspired me to build my own local **AI macOS Agent** - up to now a first sketch on the wall and it will have to be improved over time.
@@ -40,7 +39,7 @@ The following repositories inspired me to build my own local **AI macOS Agent** 
 
 ### Overview
 
-This project integrates two powerful AI frameworks:
+This project integrates three powerful AI frameworks:
 - **AI macOS Agent**: Provides n8n workflow automation with 400+ integrations and AI components
 - **Agent Zero**: Offers AI agents with terminal and web interfaces
 

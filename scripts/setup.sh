@@ -131,14 +131,14 @@ api:
 
 entryPoints:
   web:
-    address: ":80"
+    address: ":${TRAEFIK_CONTAINER_PORT_HTTP}"
     http:
       redirections:
         entryPoint:
           to: websecure
           scheme: https
   websecure:
-    address: ":443"
+    address: ":${TRAEFIK_CONTAINER_PORT_HTTPS}"
 
 providers:
   docker:
