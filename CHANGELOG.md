@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optimized container configurations for macOS
 - Optimized astroluma.yml
 - Shortened Code of Conduct
-- Revised setup.sh, validate-services.sh and Readme.md
+- Revised setup.sh, validate-services.sh and Readme.md7  V
 
 ## [1.0.2] - 2025-05-26
 
