@@ -1,9 +1,9 @@
-# AI macOS Agent - Projekt
+# AI macOS Agent
 
 A comprehensive toolkit for running AI services locally on macOS in a containerized environment, combining the power of n8n workflow automation and Agent Zero AI assistants.
 
 ## *"Good artists copy, great artists steal."*  
-(PabloPicasso)  
+(Pablo Picasso)  
 
 ![Feininger](https://github.com/netzbub/AI-macOS-Agent/blob/main/docs/images/feininger.jpg)  
 Lyonel Feininger
@@ -42,15 +42,18 @@ The following repositories inspired me to build my own local **AI macOS Agent** 
 This project integrates three powerful AI frameworks:
 - **AI macOS Agent**: Provides n8n workflow automation with 400+ integrations and AI components
 - **Agent Zero**: Offers AI agents with terminal and web interfaces
+- **Open WebUI**: as frontend for **Ollama** and various locally hosted LLMs
 
 All services are accessible through a central Astroluma dashboard and secured with local SSL certificates.
 
 ### Features
 
-- **Central Dashboard**: Astroluma for managing all services
+- **Central Dashboard**: Astroluma for accessing all services
 - **Workflow Automation**: n8n with 400+ integrations and AI components
 - **AI Agents**: Agent Zero for terminal and web-based AI assistance
-- **Local LLM Integration**: Direct connection to locally installed Ollama via host.docker.internal bridge, allowing containers to access Ollama running on the host system
+- **Open WebUI**: Use different LLMs in your browser, free and privacy-focused
+- **Container Management**: realized via Portainer integration
+- **Monitoring**: Prometheus metrics and JSON logging
 - **SSL Security**: Local domains secured with mkcert certificates
 - **Reverse Proxy**: Traefik for routing and SSL termination
 - **Backup Solution**: Optimized for Synology NAS
@@ -60,21 +63,21 @@ All services are accessible through a central Astroluma dashboard and secured wi
 - macOS (tested on macOS 15.5)
 - [Homebrew](https://brew.sh/)
 - [Docker/Orbstack](https://orbstack.dev/)
-- [Ollama](https://ollama.ai/) - installed locally, not locally in a container
-- [mkcert](https://github.com/FiloSottile/mkcert) - it has to be installed on your machine before running the installer, the bash-script will setup the SSL Certificates for the local domain and subdomain which you setup in the .env file.
+- [Ollama](https://ollama.ai/) - installed locally, (not in a container)
+- [mkcert](https://github.com/FiloSottile/mkcert) - must be installed locally before running the bash-script installer
 
 **Be very (!) careful** with choosing a TLD for your local network. The most recommended two ways, that will not conflict with existing local or public domains and with public DNS, are either to use [.home.arpa](https://home.arpa). The second recommended way is to use a subdomain of a domain, that you 'own' like [sub.mydomain.com](https://sub.mydomain.com). Be aware, that mkcert only supports sub.mydomain.com but will not work with next.sub.mydomain.com.
 
-Add to /etc/hosts:
+Add to your local /etc/hosts file before using the bash script:
 ```
 127.0.0.1   home.arpa
+127.0.0.1   agent.home.arpa
+127.0.0.1   chat.home.arpa
 127.0.0.1   luma.home.arpa
 127.0.0.1   n8n.home.arpa
-127.0.0.1   agent.home.arpa
 127.0.0.1   portainer.home.arpa
-127.0.0.1   traefik.home.arpa
-127.0.0.1   chat.home.arpa
 127.0.0.1   pro.home.arpa
+127.0.0.1   traefik.home.arpa
 ```
 
 ### Installation
@@ -85,7 +88,7 @@ Add to /etc/hosts:
    cd ai-macos-agent
    ```
 
-2. Copy the example environment file and edit it:
+2. Copy and configure the environment file ```.env```:
    ```bash
    cp .env.example .env
    # Edit .env with your preferred settings
@@ -110,49 +113,45 @@ Add to /etc/hosts:
 
 The central `.env` file contains all configuration options:
 
-```
-# General Settings
-DOMAIN=home.arpa
+# Domain & Service Subdomain Configuration
 
-# Port Settings
-N8N_PORT=5678
-ASTROLUMA_PORT=8000
-AGENT_ZERO_PORT=80
-TRAEFIK_DASHBOARD_PORT=8080
+# Container Configuration
+## Internal & External Container Ports & Port Mappings
 
-# n8n Settings
-N8N_ENCRYPTION_KEY=your-encryption-key
-POSTGRES_PASSWORD=your-postgres-password
+# Database Passwords
 
-# Ollama Integration
-OLLAMA_HOST=host.docker.internal
-OLLAMA_PORT=11434
-```
+# Service Passwords/Passkey
+
+# Ollama Configuration
+
+# Services Memory Limits
+
+# Network Configuration
+TRAEFIK_NETWORK=traefik_network
+DOCKER_SUBNET=172.20.0.0/16
+
+# Backup Configuration (optional)
 
 ### Directory Structure
-
 ```
 .
-├── .env.example
-├── .git
-├── .gitignore
-├── .history
+├── CHANGELOG.md
 ├── config
 │   ├── prometheus
 │   │   └── prometheus.yml
 │   └── traefik
+│       ├── certs
 │       ├── dynamic
 │       │   └── tls.yml
 │       └── traefik.yml
-│       └── certs/
-├── data/
-│   ├── agent-zero/
-│   ├── astroluma/
-│   ├── n8n/
-│   ├── open-webui/
-│   ├── portainer/
-│   ├── postgres/
-│   └── prometheus/
+├── data
+│   ├── agent-zero
+│   ├── astroluma
+│   ├── n8n
+│   ├── open-webui
+│   ├── portainer
+│   ├── postgres
+│   └── prometheus
 ├── docker-compose
 │   ├── agent-zero.yml
 │   ├── astroluma.yml
@@ -164,13 +163,18 @@ OLLAMA_PORT=11434
 ├── docs
 │   ├── CODE_OF_CONDUCT.md
 │   ├── CONTRIBUTING.md
-│   └── images
-│       └── feininger.jpg
+│   ├── images
+│   │   └── feininger.jpg
+│   └── sketches
+│       └── Skizzen.md
 ├── README.md
 ├── scripts
 │   ├── backup-synology.sh
-│   ├── setup.sh
-└── shared
+│   └── setup.sh
+├── shared
+│   ├── data
+│   └── documents
+└── VERSION
 ```
 
 ### Usage
@@ -178,13 +182,15 @@ OLLAMA_PORT=11434
 ### Accessing Services
 
 All services are accessible through your browser using the following URLs:
+
+- **Agent Zero**: https://agent.home.arpa:8443
 - **Astroluma Dashboard**: https://luma.home.arpa:8443
 - **n8n Workflow Automation**: https://n8n.home.arpa:8443
-- **Agent Zero**: https://agent.home.arpa:8443
-- **Portainer**: https://portainer.home.arpa:8443
-- **Traefik Dashboard**: https://traefik.home.arpa:8443
 - **Open WebUI**: https://chat.home.arpa:8443
+- **Portainer**: https://portainer.home.arpa:8443
 - **Prometheus**: https://pro.home.arpa:8443
+- **Traefik Dashboard**: https://traefik.home.arpa:8443
+
 
 ### Working with Local Files
 
@@ -223,6 +229,7 @@ docker logs traefik
 docker logs astroluma
 docker logs n8n
 docker logs agent-zero
+...
 ```
 
 ### License
