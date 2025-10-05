@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 services:
   mongodb:
@@ -10,11 +10,16 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD:-admin123}
       - MONGO_INITDB_DATABASE=astroluma
     volumes:
-      - ../data/mongodb:/data/db
+      - mongodb_data:/data/db
     networks:
       - astroluma_network
     ports:
       - "127.0.0.1:27017:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   app:
     image: sanjeet990/astroluma:latest
@@ -24,12 +29,13 @@ services:
       - MONGODB_URI=mongodb://admin:${MONGODB_PASSWORD:-admin123}@mongodb:27017/astroluma?authSource=admin
       - NODE_ENV=production
     volumes:
-      - ../data/astroluma:/app/data
+      - astroluma_data:/app/data
     networks:
       - traefik_network
       - astroluma_network
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.astroluma.rule=Host(`luma.${DOMAIN}`)"
@@ -42,3 +48,7 @@ networks:
     external: true
   astroluma_network:
     driver: bridge
+
+volumes:
+  mongodb_data:
+  astroluma_data:

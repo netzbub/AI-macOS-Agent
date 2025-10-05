@@ -12,19 +12,39 @@ else
   exit 1
 fi
 
+# Validate environment variables
+if [ "$POSTGRES_PASSWORD" = "your_secure_postgres_password" ] || [ -z "$POSTGRES_PASSWORD" ]; then
+  echo "Error: POSTGRES_PASSWORD is not set or still the default placeholder"
+  echo "Please edit .env and set a secure password for POSTGRES_PASSWORD"
+  exit 1
+fi
+
+if [ "$MONGODB_PASSWORD" = "your_secure_mongodb_password" ] || [ -z "$MONGODB_PASSWORD" ]; then
+  echo "Error: MONGODB_PASSWORD is not set or still the default placeholder"
+  echo "Please edit .env and set a secure password for MONGODB_PASSWORD"
+  exit 1
+fi
+
+if [ "$N8N_ENCRYPTION_KEY" = "your_32_character_encryption_key_here" ] || [ -z "$N8N_ENCRYPTION_KEY" ] || [ ${#N8N_ENCRYPTION_KEY} -ne 32 ]; then
+  echo "Error: N8N_ENCRYPTION_KEY is not set, still the default placeholder, or not exactly 32 characters"
+  echo "Please edit .env and set a 32-character encryption key for N8N_ENCRYPTION_KEY"
+  echo "You can generate one with: openssl rand -hex 16"
+  exit 1
+fi
+
 # Base directory
 BASE_DIR="$(pwd)"
 
 # Colors for output
 GREEN='\033[0;32m'
-BLUE='\033[0;34m'
+LIGHT_BLUE='\033[1;34m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}=========================================${NC}"
-echo -e "${BLUE}    AI macOS Agent - Setup Script    ${NC}"
-echo -e "${BLUE}=========================================${NC}"
+echo -e "${LIGHT_BLUE}=========================================${NC}"
+echo -e "${LIGHT_BLUE}    AI macOS Agent - Setup Script    ${NC}"
+echo -e "${LIGHT_BLUE}=========================================${NC}"
 echo ""
 
 # Check prerequisites
@@ -56,11 +76,11 @@ echo ""
 
 # Display /etc/hosts requirement
 echo -e "${YELLOW}Important: Please add these lines to your /etc/hosts file:${NC}"
-echo -e "${BLUE}127.0.0.1   home.arpa${NC}"
-echo -e "${BLUE}127.0.0.1   luma.home.arpa${NC}"
-echo -e "${BLUE}127.0.0.1   n8n.home.arpa${NC}"
-echo -e "${BLUE}127.0.0.1   agent.home.arpa${NC}"
-echo -e "${BLUE}127.0.0.1   traefik.home.arpa${NC}"
+echo -e "${LIGHT_BLUE}127.0.0.1   home.arpa${NC}"
+echo -e "${LIGHT_BLUE}127.0.0.1   luma.home.arpa${NC}"
+echo -e "${LIGHT_BLUE}127.0.0.1   n8n.home.arpa${NC}"
+echo -e "${LIGHT_BLUE}127.0.0.1   agent.home.arpa${NC}"
+echo -e "${LIGHT_BLUE}127.0.0.1   traefik.home.arpa${NC}"
 echo ""
 echo -e "You can do this by running:"
 echo -e "${GREEN}sudo nano /etc/hosts${NC}"
@@ -208,9 +228,9 @@ done
 echo ""
 
 # Final instructions
-echo -e "${BLUE}==================================================${NC}"
-echo -e "${BLUE}      Installation Complete!                       ${NC}"
-echo -e "${BLUE}==================================================${NC}"
+echo -e "${LIGHT_BLUE}==================================================${NC}"
+echo -e "${LIGHT_BLUE}      Installation Complete!                       ${NC}"
+echo -e "${LIGHT_BLUE}==================================================${NC}"
 echo ""
 echo -e "You can access the services at:"
 echo -e "- Astroluma Dashboard: ${GREEN}https://luma.${DOMAIN}${NC}"
