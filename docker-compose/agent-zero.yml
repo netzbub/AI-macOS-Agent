@@ -1,4 +1,3 @@
-version: '3'
 services:
   agent-zero:
     image: frdel/agent-zero-run:latest
