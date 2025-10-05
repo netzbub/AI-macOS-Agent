@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   portainer:
     image: portainer/portainer-ce:latest
@@ -10,6 +8,10 @@ services:
       - ../data/portainer:/data
     networks:
       - traefik_network
+    deploy:
+      resources:
+        limits:
+          memory: ${PORTAINER_MEMORY_LIMIT}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN}`)"

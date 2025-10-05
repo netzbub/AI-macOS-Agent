@@ -27,6 +27,7 @@ services:
       - "--entrypoints.websecure.address=:${TRAEFIK_CONTAINER_PORT_HTTPS}"
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--metrics.prometheus=true"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"

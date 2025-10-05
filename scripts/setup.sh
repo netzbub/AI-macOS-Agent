@@ -87,6 +87,7 @@ echo -e "${LIGHT_BLUE}127.0.0.1   home.arpa${NC}"
 echo -e "${LIGHT_BLUE}127.0.0.1   luma.home.arpa${NC}"
 echo -e "${LIGHT_BLUE}127.0.0.1   n8n.home.arpa${NC}"
 echo -e "${LIGHT_BLUE}127.0.0.1   agent.home.arpa${NC}"
+echo -e "${LIGHT_BLUE}127.0.0.1   portainer.home.arpa${NC}"
 echo -e "${LIGHT_BLUE}127.0.0.1   traefik.home.arpa${NC}"
 echo -e "${LIGHT_BLUE}127.0.0.1   chat.home.arpa${NC}"
 echo -e "${LIGHT_BLUE}127.0.0.1   pro.home.arpa${NC}"
@@ -108,6 +109,7 @@ mkdir -p "$BASE_DIR/data/n8n/workflows"
 mkdir -p "$BASE_DIR/data/postgres"
 mkdir -p "$BASE_DIR/data/agent-zero"
 mkdir -p "$BASE_DIR/data/open-webui"
+mkdir -p "$BASE_DIR/data/portainer"
 mkdir -p "$BASE_DIR/data/prometheus"
 mkdir -p "$BASE_DIR/shared/documents"
 mkdir -p "$BASE_DIR/shared/data"
@@ -239,6 +241,7 @@ docker-compose -f docker-compose/traefik.yml --env-file .env up -d
 docker-compose -f docker-compose/astroluma.yml --env-file .env up -d
 docker-compose -f docker-compose/n8n.yml --env-file .env up -d
 docker-compose -f docker-compose/agent-zero.yml --env-file .env up -d
+docker-compose -f docker-compose/portainer.yml --env-file .env up -d
 docker-compose -f docker-compose/open-webui.yml --env-file .env up -d
 docker-compose -f docker-compose/prometheus.yml --env-file .env up -d
 
@@ -251,7 +254,7 @@ echo "Please wait a moment for all services to initialize..."
 sleep 15
 
 # Check if containers are running
-containers=("traefik" "astroluma" "n8n" "postgres" "agent-zero" "open-webui" "prometheus")
+containers=("traefik" "astroluma" "n8n" "postgres" "agent-zero" "portainer" "open-webui" "prometheus")
 failed_containers=0
 
 for container in "${containers[@]}"; do
@@ -271,6 +274,7 @@ urls=(
     "https://luma.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}|Astroluma Dashboard"
     "https://n8n.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}|n8n Workflow Automation"
     "https://agent.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}|Agent Zero"
+    "https://portainer.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}|Portainer"
     "https://traefik.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}|Traefik Dashboard"
     "https://chat.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}|Open WebUI"
     "https://pro.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}|Prometheus"
@@ -301,6 +305,7 @@ echo -e "You can access the services at:"
 echo -e "- Astroluma Dashboard: ${GREEN}https://luma.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}${NC}"
 echo -e "- n8n Workflow Automation: ${GREEN}https://n8n.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}${NC}"
 echo -e "- Agent Zero: ${GREEN}https://agent.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}${NC}"
+echo -e "- Portainer: ${GREEN}https://portainer.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}${NC}"
 echo -e "- Traefik Dashboard: ${GREEN}https://traefik.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}${NC}"
 echo -e "- Open WebUI: ${GREEN}https://chat.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}${NC}"
 echo -e "- Prometheus: ${GREEN}https://pro.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}${NC}"

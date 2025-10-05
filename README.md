@@ -71,6 +71,7 @@ Add to /etc/hosts:
 127.0.0.1   luma.home.arpa
 127.0.0.1   n8n.home.arpa
 127.0.0.1   agent.home.arpa
+127.0.0.1   portainer.home.arpa
 127.0.0.1   traefik.home.arpa
 127.0.0.1   chat.home.arpa
 127.0.0.1   pro.home.arpa
@@ -100,6 +101,7 @@ Add to /etc/hosts:
     - Dashboard: https://luma.home.arpa:8443
     - n8n: https://n8n.home.arpa:8443
     - Agent Zero: https://agent.home.arpa:8443
+    - Portainer: https://portainer.home.arpa:8443
     - Traefik: https://traefik.home.arpa:8443
     - Open WebUI: https://chat.home.arpa:8443
     - Prometheus: https://pro.home.arpa:8443
@@ -148,6 +150,7 @@ OLLAMA_PORT=11434
 │   ├── astroluma/
 │   ├── n8n/
 │   ├── open-webui/
+│   ├── portainer/
 │   ├── postgres/
 │   └── prometheus/
 ├── docker-compose
@@ -155,6 +158,7 @@ OLLAMA_PORT=11434
 │   ├── astroluma.yml
 │   ├── n8n.yml
 │   ├── open-webui.yml
+│   ├── portainer.yml
 │   ├── prometheus.yml
 │   └── traefik.yml
 ├── docs
@@ -177,6 +181,7 @@ All services are accessible through your browser using the following URLs:
 - **Astroluma Dashboard**: https://luma.home.arpa:8443
 - **n8n Workflow Automation**: https://n8n.home.arpa:8443
 - **Agent Zero**: https://agent.home.arpa:8443
+- **Portainer**: https://portainer.home.arpa:8443
 - **Traefik Dashboard**: https://traefik.home.arpa:8443
 - **Open WebUI**: https://chat.home.arpa:8443
 - **Prometheus**: https://pro.home.arpa:8443
