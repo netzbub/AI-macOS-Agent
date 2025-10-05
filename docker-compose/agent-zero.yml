@@ -11,6 +11,10 @@ services:
       - ../shared:/a0/shared
     networks:
       - traefik_network
+    deploy:
+      resources:
+        limits:
+          memory: ${AGENT_MEMORY_LIMIT}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:

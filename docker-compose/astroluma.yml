@@ -13,6 +13,10 @@ services:
       - mongodb_data:/data/db
     networks:
       - astroluma_network
+    deploy:
+      resources:
+        limits:
+          memory: ${MONGODB_MEMORY_LIMIT}
     ports:
       - "127.0.0.1:${MONGODB_HOST_PORT}:27017"
     healthcheck:
@@ -33,6 +37,10 @@ services:
     networks:
       - traefik_network
       - astroluma_network
+    deploy:
+      resources:
+        limits:
+          memory: ${LUMA_MEMORY_LIMIT}
     depends_on:
       mongodb:
         condition: service_healthy

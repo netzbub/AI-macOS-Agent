@@ -31,6 +31,10 @@ services:
     networks:
       - traefik_network
       - n8n_network
+    deploy:
+      resources:
+        limits:
+          memory: ${N8N_MEMORY_LIMIT}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     labels:
@@ -54,6 +58,10 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - n8n_network
+    deploy:
+      resources:
+        limits:
+          memory: ${POSTGRES_MEMORY_LIMIT}
     ports:
       - "127.0.0.1:${POSTGRES_HOST_PORT}:5432"
     healthcheck:

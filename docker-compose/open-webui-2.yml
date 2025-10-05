@@ -1,10 +1,14 @@
-version: '3'
-
 services:
   open-webui:
     image: ghcr.io/open-webui/open-webui:main
     container_name: open-webui
     restart: unless-stopped
+    ports:
+      - "${CHAT_PORT}"
+    deploy:
+      resources:
+        limits:
+          memory: ${CHAT_MEMORY_LIMIT}
     environment:
       - OLLAMA_BASE_URL=http://host.docker.internal:${OLLAMA_PORT}
       - WEBUI_SECRET_KEY=${OPENWEBUI_SECRET_KEY}
@@ -18,20 +22,16 @@ services:
       - ../data/open-webui:/app/backend/data
       - ../shared:/app/shared
     networks:
-      - traefik_network
-    deploy:
-      resources:
-        limits:
-          memory: ${CHAT_MEMORY_LIMIT}
+      - ${TRAEFIK_NETWORK}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.open-webui.rule=Host(`chat.${DOMAIN}`)"
+      - "traefik.http.routers.open-webui.rule=Host(`${CHAT_SUBDOMAIN}.${DOMAIN}`)"
       - "traefik.http.routers.open-webui.entrypoints=websecure"
       - "traefik.http.routers.open-webui.tls=true"
-      - "traefik.http.services.open-webui.loadbalancer.server.port=8080"
+      - "traefik.http.services.open-webui.loadbalancer.server.port=${CHAT_CONTAINER_PORT}"
 
 networks:
-  traefik_network:
+  ${TRAEFIK_NETWORK}:
     external: true

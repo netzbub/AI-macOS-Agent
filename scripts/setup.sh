@@ -26,10 +26,17 @@ if [ "$MONGODB_PASSWORD" = "your_secure_mongodb_password" ] || [ -z "$MONGODB_PA
 fi
 
 if [ "$N8N_ENCRYPTION_KEY" = "your_32_character_encryption_key_here" ] || [ -z "$N8N_ENCRYPTION_KEY" ] || [ ${#N8N_ENCRYPTION_KEY} -ne 32 ]; then
-  echo "Error: N8N_ENCRYPTION_KEY is not set, still the default placeholder, or not exactly 32 characters"
-  echo "Please edit .env and set a 32-character encryption key for N8N_ENCRYPTION_KEY"
-  echo "You can generate one with: openssl rand -hex 16"
-  exit 1
+   echo "Error: N8N_ENCRYPTION_KEY is not set, still the default placeholder, or not exactly 32 characters"
+   echo "Please edit .env and set a 32-character encryption key for N8N_ENCRYPTION_KEY"
+   echo "You can generate one with: openssl rand -hex 16"
+   exit 1
+fi
+
+if [ "$OPENWEBUI_SECRET_KEY" = "your_secure_openwebui_secret_key_here" ] || [ -z "$OPENWEBUI_SECRET_KEY" ]; then
+   echo "Error: OPENWEBUI_SECRET_KEY is not set or still the default placeholder"
+   echo "Please edit .env and set a secure secret key for OPENWEBUI_SECRET_KEY"
+   echo "You can generate one with: openssl rand -hex 32"
+   exit 1
 fi
 
 # Base directory
@@ -81,6 +88,8 @@ echo -e "${LIGHT_BLUE}127.0.0.1   luma.home.arpa${NC}"
 echo -e "${LIGHT_BLUE}127.0.0.1   n8n.home.arpa${NC}"
 echo -e "${LIGHT_BLUE}127.0.0.1   agent.home.arpa${NC}"
 echo -e "${LIGHT_BLUE}127.0.0.1   traefik.home.arpa${NC}"
+echo -e "${LIGHT_BLUE}127.0.0.1   chat.home.arpa${NC}"
+echo -e "${LIGHT_BLUE}127.0.0.1   pro.home.arpa${NC}"
 echo ""
 echo -e "You can do this by running:"
 echo -e "${GREEN}sudo nano /etc/hosts${NC}"
@@ -91,12 +100,64 @@ read -p "Press Enter to continue after updating /etc/hosts..."
 echo -e "${YELLOW}Creating directory structure...${NC}"
 mkdir -p "$BASE_DIR/config/traefik/dynamic"
 mkdir -p "$BASE_DIR/config/traefik/certs"
+mkdir -p "$BASE_DIR/config/prometheus"
 mkdir -p "$BASE_DIR/data/astroluma"
 mkdir -p "$BASE_DIR/data/n8n"
+mkdir -p "$BASE_DIR/data/n8n/custom"
+mkdir -p "$BASE_DIR/data/n8n/workflows"
 mkdir -p "$BASE_DIR/data/postgres"
 mkdir -p "$BASE_DIR/data/agent-zero"
+mkdir -p "$BASE_DIR/data/open-webui"
+mkdir -p "$BASE_DIR/data/prometheus"
 mkdir -p "$BASE_DIR/shared/documents"
 mkdir -p "$BASE_DIR/shared/data"
+
+# Create sample n8n workflow for Ollama integration
+cat > "$BASE_DIR/data/n8n/workflows/ollama_test.json" << EOF
+{
+  "name": "Ollama Test",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "prompt": "Hello, I'm testing the Ollama integration with n8n. Please respond with a short greeting.",
+        "options": {
+          "model": "llama3"
+        }
+      },
+      "name": "Ollama",
+      "type": "n8n-nodes-base.ollama",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Ollama",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
+EOF
 
 echo -e "${GREEN}Directory structure created!${NC}"
 echo ""
@@ -178,6 +239,8 @@ docker-compose -f docker-compose/traefik.yml --env-file .env up -d
 docker-compose -f docker-compose/astroluma.yml --env-file .env up -d
 docker-compose -f docker-compose/n8n.yml --env-file .env up -d
 docker-compose -f docker-compose/agent-zero.yml --env-file .env up -d
+docker-compose -f docker-compose/open-webui.yml --env-file .env up -d
+docker-compose -f docker-compose/prometheus.yml --env-file .env up -d
 
 echo -e "${GREEN}All services started!${NC}"
 echo ""
@@ -188,7 +251,7 @@ echo "Please wait a moment for all services to initialize..."
 sleep 15
 
 # Check if containers are running
-containers=("traefik" "astroluma" "n8n" "postgres" "agent-zero")
+containers=("traefik" "astroluma" "n8n" "postgres" "agent-zero" "open-webui" "prometheus")
 failed_containers=0
 
 for container in "${containers[@]}"; do
@@ -209,6 +272,8 @@ urls=(
     "https://n8n.${DOMAIN}|n8n Workflow Automation"
     "https://agent.${DOMAIN}|Agent Zero"
     "https://traefik.${DOMAIN}|Traefik Dashboard"
+    "https://chat.${DOMAIN}|Open WebUI"
+    "https://pro.${DOMAIN}|Prometheus"
 )
 failed_urls=0
 
@@ -237,6 +302,8 @@ echo -e "- Astroluma Dashboard: ${GREEN}https://luma.${DOMAIN}${NC}"
 echo -e "- n8n Workflow Automation: ${GREEN}https://n8n.${DOMAIN}${NC}"
 echo -e "- Agent Zero: ${GREEN}https://agent.${DOMAIN}${NC}"
 echo -e "- Traefik Dashboard: ${GREEN}https://traefik.${DOMAIN}${NC}"
+echo -e "- Open WebUI: ${GREEN}https://chat.${DOMAIN}${NC}"
+echo -e "- Prometheus: ${GREEN}https://pro.${DOMAIN}${NC}"
 echo ""
 echo -e "Please refer to the user guide for detailed instructions:"
 echo -e "${GREEN}$BASE_DIR/docs/user_guide.md${NC}"

@@ -14,6 +14,10 @@ services:
       - ../config/traefik/certs:/certs
     networks:
       - traefik_network
+    deploy:
+      resources:
+        limits:
+          memory: ${TRAEFIK_MEMORY_LIMIT}
     command:
       - "--api.dashboard=true"
       - "--api.insecure=false"

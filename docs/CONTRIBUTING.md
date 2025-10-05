@@ -76,10 +76,10 @@ We welcome suggestions for enhancements! Please create an issue with:
 
 Before submitting a pull request, please test your changes:
 
-1. Run the validation script:
-   ```bash
-   ./scripts/validate-services.sh
-   ```
+1. Run the setup script to validate services:
+    ```bash
+    ./scripts/setup.sh
+    ```
 
 2. Verify all services are accessible through their respective URLs
 

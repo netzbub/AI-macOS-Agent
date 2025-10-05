@@ -1,4 +1,4 @@
-# AI macOS Agent
+# AI macOS Agent - Projekt
 
 A comprehensive toolkit for running AI services locally on macOS in a containerized environment, combining the power of n8n workflow automation and Agent Zero AI assistants.
 
@@ -67,11 +67,13 @@ All services are accessible through a central Astroluma dashboard and secured wi
 
 Add to /etc/hosts:
 ```
-127.0.0.1   mac.home.arpa
+127.0.0.1   home.arpa
 127.0.0.1   luma.home.arpa
 127.0.0.1   n8n.home.arpa
 127.0.0.1   agent.home.arpa
 127.0.0.1   traefik.home.arpa
+127.0.0.1   chat.home.arpa
+127.0.0.1   pro.home.arpa
 ```
 
 ### Installation
@@ -95,10 +97,12 @@ Add to /etc/hosts:
    ```
 
 4. Access the services:
-   - Dashboard: https://luma.home.arpa
-   - n8n: https://n8n.home.arpa
-   - Agent Zero: https://agent.home.arpa
-   - Traefik: https://traefik.home.arpa
+    - Dashboard: https://luma.home.arpa
+    - n8n: https://n8n.home.arpa
+    - Agent Zero: https://agent.home.arpa
+    - Traefik: https://traefik.home.arpa
+    - Open WebUI: https://chat.home.arpa
+    - Prometheus: https://pro.home.arpa
 
 ### Configuration
 
@@ -132,6 +136,8 @@ OLLAMA_PORT=11434
 ├── .gitignore
 ├── .history
 ├── config
+│   ├── prometheus
+│   │   └── prometheus.yml
 │   └── traefik
 │       ├── dynamic
 │       │   └── tls.yml
@@ -141,11 +147,15 @@ OLLAMA_PORT=11434
 │   ├── agent-zero/
 │   ├── astroluma/
 │   ├── n8n/
-│   └── postgres/
+│   ├── open-webui/
+│   ├── postgres/
+│   └── prometheus/
 ├── docker-compose
 │   ├── agent-zero.yml
 │   ├── astroluma.yml
 │   ├── n8n.yml
+│   ├── open-webui.yml
+│   ├── prometheus.yml
 │   └── traefik.yml
 ├── docs
 │   ├── CODE_OF_CONDUCT.md
@@ -155,11 +165,7 @@ OLLAMA_PORT=11434
 ├── README.md
 ├── scripts
 │   ├── backup-synology.sh
-│   ├── generate-certs.sh
-│   ├── setup-n8n.sh
-│   ├── setup-volumes.sh
 │   ├── setup.sh
-│   └── validate-services.sh
 └── shared
 ```
 
@@ -172,6 +178,8 @@ All services are accessible through your browser using the following URLs:
 - **n8n Workflow Automation**: https://n8n.home.arpa
 - **Agent Zero**: https://agent.home.arpa
 - **Traefik Dashboard**: https://traefik.home.arpa
+- **Open WebUI**: https://chat.home.arpa
+- **Prometheus**: https://pro.home.arpa
 
 ### Working with Local Files
 
