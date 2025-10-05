@@ -268,12 +268,12 @@ done
 
 # Check URLs
 urls=(
-    "https://luma.${DOMAIN}|Astroluma Dashboard"
-    "https://n8n.${DOMAIN}|n8n Workflow Automation"
-    "https://agent.${DOMAIN}|Agent Zero"
-    "https://traefik.${DOMAIN}|Traefik Dashboard"
-    "https://chat.${DOMAIN}|Open WebUI"
-    "https://pro.${DOMAIN}|Prometheus"
+    "https://luma.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}|Astroluma Dashboard"
+    "https://n8n.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}|n8n Workflow Automation"
+    "https://agent.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}|Agent Zero"
+    "https://traefik.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}|Traefik Dashboard"
+    "https://chat.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}|Open WebUI"
+    "https://pro.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}|Prometheus"
 )
 failed_urls=0
 
@@ -298,12 +298,12 @@ echo -e "${LIGHT_BLUE}      Installation Complete!                       ${NC}"
 echo -e "${LIGHT_BLUE}==================================================${NC}"
 echo ""
 echo -e "You can access the services at:"
-echo -e "- Astroluma Dashboard: ${GREEN}https://luma.${DOMAIN}${NC}"
-echo -e "- n8n Workflow Automation: ${GREEN}https://n8n.${DOMAIN}${NC}"
-echo -e "- Agent Zero: ${GREEN}https://agent.${DOMAIN}${NC}"
-echo -e "- Traefik Dashboard: ${GREEN}https://traefik.${DOMAIN}${NC}"
-echo -e "- Open WebUI: ${GREEN}https://chat.${DOMAIN}${NC}"
-echo -e "- Prometheus: ${GREEN}https://pro.${DOMAIN}${NC}"
+echo -e "- Astroluma Dashboard: ${GREEN}https://luma.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}${NC}"
+echo -e "- n8n Workflow Automation: ${GREEN}https://n8n.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}${NC}"
+echo -e "- Agent Zero: ${GREEN}https://agent.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}${NC}"
+echo -e "- Traefik Dashboard: ${GREEN}https://traefik.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}${NC}"
+echo -e "- Open WebUI: ${GREEN}https://chat.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}${NC}"
+echo -e "- Prometheus: ${GREEN}https://pro.${DOMAIN}:${TRAEFIK_HOST_PORT_HTTPS}${NC}"
 echo ""
 echo -e "Please refer to the user guide for detailed instructions:"
 echo -e "${GREEN}$BASE_DIR/docs/user_guide.md${NC}"

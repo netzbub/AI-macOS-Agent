@@ -97,12 +97,12 @@ Add to /etc/hosts:
    ```
 
 4. Access the services:
-    - Dashboard: https://luma.home.arpa
-    - n8n: https://n8n.home.arpa
-    - Agent Zero: https://agent.home.arpa
-    - Traefik: https://traefik.home.arpa
-    - Open WebUI: https://chat.home.arpa
-    - Prometheus: https://pro.home.arpa
+    - Dashboard: https://luma.home.arpa:8443
+    - n8n: https://n8n.home.arpa:8443
+    - Agent Zero: https://agent.home.arpa:8443
+    - Traefik: https://traefik.home.arpa:8443
+    - Open WebUI: https://chat.home.arpa:8443
+    - Prometheus: https://pro.home.arpa:8443
 
 ### Configuration
 
@@ -174,12 +174,12 @@ OLLAMA_PORT=11434
 ### Accessing Services
 
 All services are accessible through your browser using the following URLs:
-- **Astroluma Dashboard**: https://luma.home.arpa
-- **n8n Workflow Automation**: https://n8n.home.arpa
-- **Agent Zero**: https://agent.home.arpa
-- **Traefik Dashboard**: https://traefik.home.arpa
-- **Open WebUI**: https://chat.home.arpa
-- **Prometheus**: https://pro.home.arpa
+- **Astroluma Dashboard**: https://luma.home.arpa:8443
+- **n8n Workflow Automation**: https://n8n.home.arpa:8443
+- **Agent Zero**: https://agent.home.arpa:8443
+- **Traefik Dashboard**: https://traefik.home.arpa:8443
+- **Open WebUI**: https://chat.home.arpa:8443
+- **Prometheus**: https://pro.home.arpa:8443
 
 ### Working with Local Files
 
