@@ -51,3 +51,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Edited .env.example - port conflicts
 - Edited agent-zero.yml - port conflicts
+
+## [1.0.6] - 2025-10-05
+
+### Added
+- Integration of Open WebUI for chat interface with Ollama models
+- Integration of Prometheus for monitoring with Traefik metrics scraping
+- Integration of Portainer for Docker container management
+- Memory limits for all services to optimize resource usage
+- Additional service configurations and environment variables
+
+### Changed
+- Updated setup.sh to include new services and validations
+- Updated README.md with new services and URLs
+- Updated docker-compose files with deploy limits and configurations
+- Consolidated and cleaned up scripts (removed obsolete ones)
+- Fixed Prometheus scraping configuration for SSL and scheme
+- Updated /etc/hosts requirements for new domains
+
+### Removed
+- Obsolete scripts: generate-certs.sh, setup-volumes.sh, validate-services.sh, setup-n8n.sh
+- Deprecated version fields in docker-compose files
